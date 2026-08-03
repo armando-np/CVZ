@@ -10,7 +10,7 @@ Sitio estático, responsivo y escalable para **Centro Veterinario Zaragoza**. Es
 - Botones de llamada, WhatsApp, Instagram y cómo llegar.
 - Mapa, horarios, precios de referencia y preguntas frecuentes.
 - SEO técnico: títulos y descripciones por página, URL canónica, Open Graph, Twitter Cards, datos estructurados `VeterinaryCare`, migas de pan, FAQ, `sitemap.xml` y `robots.txt`.
-- Google Analytics 4 opcional, cargado únicamente después del consentimiento.
+- Google Analytics 4 configurado con la propiedad `G-T5QGNG2G1R`, cargado únicamente después del consentimiento.
 - Eventos de medición para clics de contacto y solicitudes de cita, sin enviar nombres de personas ni mascotas.
 - Diseño accesible, adaptable a móvil y escritorio, con soporte para reducción de movimiento.
 - Publicación automática mediante GitHub Actions.
@@ -67,11 +67,11 @@ Estas variables pueden configurarse en **Settings → Secrets and variables → 
 | Variable | Uso | Ejemplo |
 |---|---|---|
 | `SITE_URL` | Dominio final, especialmente si se usa dominio propio | `https://www.ejemplo.com/` |
-| `GA4_MEASUREMENT_ID` | Identificador de Google Analytics 4 | `G-XXXXXXXXXX` |
+| `GA4_MEASUREMENT_ID` | Identificador de Google Analytics 4; reemplaza el valor local si se define | `G-T5QGNG2G1R` |
 | `GOOGLE_SITE_VERIFICATION` | Valor de verificación de Search Console | Solo el código de verificación |
 | `BING_SITE_VERIFICATION` | Valor de verificación de Bing Webmaster Tools | Solo el código de verificación |
 
-Si `GA4_MEASUREMENT_ID` queda vacío, Google Analytics no se carga y el aviso de preferencias se oculta.
+La medición `G-T5QGNG2G1R` ya está guardada en `site.config.json`, por lo que no es obligatorio crear la variable en GitHub. Si se define `GA4_MEASUREMENT_ID`, su valor reemplaza la configuración local. Analytics solo se carga después de que la persona visitante acepta la analítica.
 
 ## Decisiones de contenido
 
