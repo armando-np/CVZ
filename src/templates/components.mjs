@@ -1,6 +1,38 @@
 import { business, navigation } from "../data/business.mjs";
 import { icon } from "./icons.mjs";
 
+export function responsiveImage({
+  ctx,
+  image,
+  alt,
+  className = "",
+  sizes = "",
+  loading = "lazy",
+  decoding = "async",
+  fetchPriority = ""
+}) {
+  if (!image?.src) return "";
+
+  const srcset = Array.isArray(image.srcset)
+    ? image.srcset.map((source) => `${ctx.asset(source.src)} ${source.width}w`).join(", ")
+    : "";
+  const attributes = [
+    `src="${ctx.asset(image.src)}"`,
+    `width="${image.width}"`,
+    `height="${image.height}"`,
+    `alt="${alt ?? image.alt ?? ""}"`,
+    `decoding="${decoding}"`
+  ];
+
+  if (className) attributes.push(`class="${className}"`);
+  if (srcset) attributes.push(`srcset="${srcset}"`);
+  if (sizes && srcset) attributes.push(`sizes="${sizes}"`);
+  if (loading) attributes.push(`loading="${loading}"`);
+  if (fetchPriority) attributes.push(`fetchpriority="${fetchPriority}"`);
+
+  return `<img ${attributes.join(" ")}>`;
+}
+
 export function buttonLink({
   href,
   label,
@@ -39,10 +71,22 @@ export function sectionHeading({ eyebrow = "", title, text = "", align = "left",
   </div>`;
 }
 
-export function serviceCard(service, { compact = false } = {}) {
-  return `<article class="service-card${compact ? " service-card--compact" : ""}" id="${service.id}">
-    <span class="service-card__icon">${icon(service.icon)}</span>
-    <div>
+export function serviceCard(service, { compact = false, ctx = null } = {}) {
+  const hasMedia = Boolean(ctx && service.image);
+  const media = hasMedia
+    ? `<div class="service-card__media">
+        ${responsiveImage({
+          ctx,
+          image: service.image,
+          sizes: "(max-width: 720px) calc(100vw - 28px), (max-width: 960px) 50vw, 320px"
+        })}
+        <span class="service-card__media-icon">${icon(service.icon)}</span>
+      </div>`
+    : `<span class="service-card__icon">${icon(service.icon)}</span>`;
+
+  return `<article class="service-card${compact ? " service-card--compact" : ""}${hasMedia ? " service-card--with-media" : ""}" id="${service.id}">
+    ${media}
+    <div class="service-card__body">
       <h3>${service.title}</h3>
       <p>${service.short}</p>
     </div>
@@ -169,7 +213,14 @@ export function locationPanel(ctx, { compact = false } = {}) {
 export function promoBanner(ctx) {
   return `<section class="promo-banner" aria-labelledby="promo-title">
     <div class="container promo-banner__inner">
-      <div class="promo-banner__icon">${icon("shield")}</div>
+      <div class="promo-banner__media">
+        ${responsiveImage({
+          ctx,
+          image: business.media.surgery,
+          sizes: "(max-width: 720px) calc(100vw - 28px), 190px"
+        })}
+        <span>${icon("surgery")}</span>
+      </div>
       <div>
         <p class="eyebrow eyebrow--light">Agenda previa</p>
         <h2 id="promo-title">Evaluación y cotización prequirúrgica sin costo</h2>

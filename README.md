@@ -55,7 +55,7 @@ El generador detecta automáticamente si GitHub Pages publicará en la raíz o d
 | Contenido de cada página | `src/pages/` |
 | Componentes compartidos | `src/templates/` |
 | Colores y diseño | `public/assets/css/styles.css` |
-| Logo e ilustraciones | `public/assets/images/` |
+| Logo, ilustraciones y fotografías optimizadas | `public/assets/images/` |
 | Analítica y eventos | `public/assets/js/analytics.js` y `public/assets/js/main.js` |
 | Configuración local | `site.config.json` |
 | Publicación | `.github/workflows/pages.yml` |
@@ -75,7 +75,7 @@ La medición `G-T5QGNG2G1R` ya está guardada en `site.config.json`, por lo que 
 
 ## Decisiones de contenido
 
-El sitio no inventa reseñas, testimonios, fotografías, correo electrónico, redes sociales ni disponibilidad 24 horas. Como esos datos no fueron entregados, se utilizaron ilustraciones originales de estilo clínico y únicamente la información confirmada en el formulario del negocio.
+El sitio no inventa reseñas, testimonios, correo electrónico, redes sociales ni disponibilidad 24 horas. Las tres fotografías entregadas se integraron como banner principal, imagen de cirugía y fotografía del perfil de Jimena; el resto de los recursos visuales conserva ilustraciones originales de estilo clínico.
 
 Revisa [CONTENIDO-PENDIENTE.md](CONTENIDO-PENDIENTE.md) antes de publicar la versión definitiva.
 

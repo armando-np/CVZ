@@ -4,6 +4,7 @@ import {
   buttonLink,
   featureCard,
   pageHero,
+  responsiveImage,
   sectionHeading,
   whatsappLink
 } from "../templates/components.mjs";
@@ -93,10 +94,20 @@ export function render(ctx) {
       })}
       <div class="team-grid team-grid--large">
         ${business.owners
-          .map(
-            (owner, index) => `<article class="team-profile">
-          <div class="team-profile__visual team-profile__visual--${index + 1}">
-            <span>${owner.initials}</span>
+          .map((owner, index) => {
+            const hasPhoto = Boolean(owner.photo);
+            return `<article class="team-profile">
+          <div class="team-profile__visual team-profile__visual--${index + 1}${hasPhoto ? " team-profile__visual--photo" : ""}">
+            ${
+              hasPhoto
+                ? responsiveImage({
+                    ctx,
+                    image: owner.photo,
+                    alt: "",
+                    sizes: "(max-width: 480px) 115px, (max-width: 720px) 110px, 170px"
+                  })
+                : `<span>${owner.initials}</span>`
+            }
             ${icon("paw", "team-profile__paw")}
           </div>
           <div><p class="eyebrow">Dirección médica</p><h3>${owner.name}</h3><p>${owner.role}</p><ul><li>${icon(
@@ -104,8 +115,8 @@ export function render(ctx) {
             )} Atención personalizada</li><li>${icon("check")} Trato empático</li><li>${icon(
               "check"
             )} Actualización continua</li></ul></div>
-        </article>`
-          )
+        </article>`;
+          })
           .join("")}
       </div>
     </div>

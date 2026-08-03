@@ -1,4 +1,44 @@
+const media = {
+  banner: {
+    src: "assets/images/banner-veterinaria-1200.webp",
+    srcset: [
+      { src: "assets/images/banner-veterinaria-720.webp", width: 720 },
+      { src: "assets/images/banner-veterinaria-1200.webp", width: 1200 }
+    ],
+    width: 1200,
+    height: 1600,
+    alt: "Cachorro en Centro Veterinario Zaragoza"
+  },
+  surgery: {
+    src: "assets/images/cirugia-veterinaria-1200.webp",
+    srcset: [
+      { src: "assets/images/cirugia-veterinaria-720.webp", width: 720 },
+      { src: "assets/images/cirugia-veterinaria-1200.webp", width: 1200 }
+    ],
+    width: 1200,
+    height: 1600,
+    alt: "Equipo veterinario durante un procedimiento quirúrgico"
+  },
+  jimena: {
+    src: "assets/images/mvz-jimena-nunez-900.webp",
+    srcset: [
+      { src: "assets/images/mvz-jimena-nunez-480.webp", width: 480 },
+      { src: "assets/images/mvz-jimena-nunez-900.webp", width: 900 }
+    ],
+    width: 900,
+    height: 1200,
+    alt: "Médica veterinaria sosteniendo a una paciente canina",
+    avatar: {
+      src: "assets/images/mvz-jimena-nunez-avatar.webp",
+      width: 400,
+      height: 400,
+      alt: ""
+    }
+  }
+};
+
 export const business = {
+  media,
   name: "Centro Veterinario Zaragoza",
   legalDisplayName: "CENTRO VETERINARIO ZARAGOZA",
   slogan: "Tu mascota, nuestra pasión",
@@ -15,7 +55,8 @@ export const business = {
     {
       name: "MVZ. Jimena Núñez Pacheco",
       initials: "JN",
-      role: "Médica Veterinaria Zootecnista"
+      role: "Médica Veterinaria Zootecnista",
+      photo: media.jimena
     }
   ],
   experience: "3 años trabajando junto a ti",
@@ -104,7 +145,8 @@ export const business = {
         id: "cirugia",
         title: "Cirugía",
         short: "Valoración prequirúrgica y planeación del procedimiento con cita previa.",
-        icon: "surgery"
+        icon: "surgery",
+        image: media.surgery
       },
       {
         id: "especialidades",

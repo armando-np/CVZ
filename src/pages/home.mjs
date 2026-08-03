@@ -6,6 +6,7 @@ import {
   locationPanel,
   priceCard,
   promoBanner,
+  responsiveImage,
   sectionHeading,
   serviceCard,
   whatsappLink
@@ -56,8 +57,15 @@ export function render(ctx) {
         </div>
       </div>
       <div class="home-hero__visual reveal reveal--delay">
-        <div class="hero-visual-card">
-          <img src="${ctx.asset("assets/images/hero-veterinary.svg")}" width="760" height="650" alt="Ilustración de un perro y un gato recibiendo atención veterinaria" decoding="async" fetchpriority="high">
+        <div class="hero-visual-card hero-visual-card--photo">
+          ${responsiveImage({
+            ctx,
+            image: business.media.banner,
+            className: "hero-visual-card__image",
+            sizes: "(max-width: 960px) calc(100vw - 40px), 540px",
+            loading: "eager",
+            fetchPriority: "high"
+          })}
           <div class="floating-card floating-card--one">${icon("stethoscope")}<span><strong>Atención integral</strong>Salud y diagnóstico</span></div>
           <div class="floating-card floating-card--two">${icon("sparkle")}<span><strong>Estética canina</strong>Cuidado y estilo</span></div>
         </div>
@@ -80,7 +88,7 @@ export function render(ctx) {
         id: "services-title"
       })}
       <div class="service-grid">
-        ${medicalPreview.map((service) => serviceCard(service)).join("")}
+        ${medicalPreview.map((service) => serviceCard(service, { ctx })).join("")}
       </div>
       <div class="section-actions">
         ${buttonLink({
@@ -182,12 +190,20 @@ export function render(ctx) {
       })}
       <div class="team-grid">
         ${business.owners
-          .map(
-            (owner) => `<article class="team-card">
-          <div class="team-card__avatar"><span>${owner.initials}</span>${icon("paw", "team-card__paw")}</div>
+          .map((owner) => {
+            const avatar = owner.photo?.avatar;
+            return `<article class="team-card">
+          <div class="team-card__avatar${avatar ? " team-card__avatar--photo" : ""}">
+            ${
+              avatar
+                ? responsiveImage({ ctx, image: avatar, alt: "", sizes: "78px" })
+                : `<span>${owner.initials}</span>`
+            }
+            ${icon("paw", "team-card__paw")}
+          </div>
           <div><h3>${owner.name}</h3><p>${owner.role}</p></div>
-        </article>`
-          )
+        </article>`;
+          })
           .join("")}
       </div>
     </div>

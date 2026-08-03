@@ -73,7 +73,7 @@ export function render(ctx) {
         id: "grooming-services-title"
       })}
       <div class="service-grid service-grid--grooming">
-        ${business.services.grooming.map((service) => serviceCard(service)).join("")}
+        ${business.services.grooming.map((service) => serviceCard(service, { ctx })).join("")}
       </div>
     </div>
   </section>
