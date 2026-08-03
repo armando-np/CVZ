@@ -1,0 +1,16 @@
+{
+  "name": "centro-veterinario-zaragoza-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sitio web estático, accesible y optimizado para Centro Veterinario Zaragoza.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "serve": "node scripts/serve.mjs",
+    "preview": "npm run build && npm run serve"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
