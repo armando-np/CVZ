@@ -3,19 +3,19 @@
   "short_name": "CV Zaragoza",
   "description": "Atención veterinaria, diagnóstico, cirugía, estética y apoyo para viajes en Venustiano Carranza, CDMX.",
   "lang": "es-MX",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/CVZ/",
+  "scope": "/CVZ/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1858b8",
   "icons": [
     {
-      "src": "/assets/icons/icon-192.png",
+      "src": "/CVZ/assets/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/assets/icons/icon-512.png",
+      "src": "/CVZ/assets/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

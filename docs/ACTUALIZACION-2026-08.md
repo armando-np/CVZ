@@ -13,3 +13,10 @@
 ## Tratamiento de imágenes
 
 Las radiografías publicadas usan versiones recortadas y optimizadas para evitar mostrar nombres o datos identificables de pacientes. Las imágenes se sirven en WebP y con tamaños responsivos.
+
+## Corrección 1.1.2 — menú móvil
+
+- El panel móvil se movió fuera del encabezado con `backdrop-filter` para evitar un fallo de renderizado observado en Safari para iPhone.
+- El panel ahora se fija directamente al viewport y calcula su posición debajo del encabezado.
+- Se retiró el bloqueo de desplazamiento del `body`, que hacía que la página pareciera congelada cuando el panel no se dibujaba.
+- El menú conserva desplazamiento interno, cierre con el botón, enlaces y tecla Escape, además de reajuste al cambiar orientación o tamaño del viewport.
