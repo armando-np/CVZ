@@ -1,117 +1,157 @@
 import { business, serviceOptions } from "../data/business.mjs";
 import {
-  breadcrumb,
   buttonLink,
   locationPanel,
-  sectionHeading,
   whatsappLink
 } from "../templates/components.mjs";
 import { icon } from "../templates/icons.mjs";
 
-export const page = {
-  route: "contacto/",
-  output: "contacto/index.html",
-  title: "Contacto y citas",
-  description:
-    "Solicita una cita por WhatsApp, llama al 55 6815 7821 o visita Centro Veterinario Zaragoza en Calle 33 #161, Ignacio Zaragoza, Venustiano Carranza, CDMX.",
-  activePath: "contacto/",
-  breadcrumbs: [{ label: "Contacto", href: "contacto/" }],
-  scripts: ["assets/js/appointment.js"]
-};
-
 export function render(ctx) {
-  return `${breadcrumb(ctx, page.breadcrumbs)}
+  const content = `
   <section class="contact-hero">
     <div class="container contact-hero__grid">
-      <div class="contact-hero__content">
+      <div class="contact-hero__content reveal">
         <p class="eyebrow">Contacto y citas</p>
-        <h1>Cuéntanos qué necesita tu mascota</h1>
-        <p>Completa el formulario y prepararemos un mensaje para enviarlo por WhatsApp. También puedes llamarnos o visitarnos.</p>
+        <h1>Cuéntanos qué atención necesita tu mascota</h1>
+        <p>Completa el formulario para preparar un mensaje de WhatsApp. Tus datos no se envían ni se almacenan en este sitio.</p>
         <div class="contact-methods">
           <a href="https://wa.me/${business.contact.whatsappNumber}?text=${encodeURIComponent(
-            "Hola, Centro Veterinario Zaragoza. Quiero solicitar una cita."
-          )}" target="_blank" rel="noopener noreferrer" data-track="whatsapp_contact_direct">${icon(
-            "whatsapp"
-          )}<span><strong>WhatsApp</strong>${business.contact.phoneDisplay}</span>${icon("arrow", "contact-method__arrow")}</a>
-          <a href="tel:${business.contact.phoneE164}" data-track="phone_contact">${icon(
-            "phone"
-          )}<span><strong>Teléfono</strong>${business.contact.phoneDisplay}</span>${icon("arrow", "contact-method__arrow")}</a>
-          <a href="${business.contact.mapDirectionsUrl}" target="_blank" rel="noopener noreferrer" data-track="map_contact">${icon(
-            "pin"
-          )}<span><strong>Dirección</strong>${business.contact.addressLine}, ${business.contact.neighborhood}</span>${icon(
-            "external",
-            "contact-method__arrow"
-          )}</a>
+            "Hola, Centro Veterinario Zaragoza. Quiero solicitar información y agendar una cita."
+          )}" target="_blank" rel="noopener noreferrer" data-track="whatsapp_contact_method">
+            <span>${icon("whatsapp")}</span><div><strong>WhatsApp</strong><small>${business.contact.phoneDisplay}</small></div>${icon("arrow", "contact-method__arrow")}
+          </a>
+          <a href="tel:${business.contact.phoneE164}" data-track="phone_contact_method">
+            <span>${icon("phone")}</span><div><strong>Llamada</strong><small>${business.contact.phoneDisplay}</small></div>${icon("arrow", "contact-method__arrow")}
+          </a>
+          <a href="${business.contact.mapDirectionsUrl}" target="_blank" rel="noopener noreferrer" data-track="map_contact_method">
+            <span>${icon("pin")}</span><div><strong>Cómo llegar</strong><small>${business.contact.addressLine}</small></div>${icon("external", "contact-method__arrow")}
+          </a>
+        </div>
+        <div class="info-stack">
+          <div>${icon("clock")}<span><strong>Clínica</strong>${business.hours.clinic.summary}</span></div>
+          <div>${icon("scissors")}<span><strong>Estética</strong>${business.hours.grooming.summary}; descanso miércoles</span></div>
         </div>
       </div>
-      <div class="appointment-card">
+
+      <div class="appointment-card reveal reveal--delay">
         <div class="appointment-card__heading">
           <span>${icon("calendar")}</span>
-          <div><p class="eyebrow">Solicitud de cita</p><h2>Prepara tu mensaje</h2><p>No se envían datos a un servidor; al finalizar se abrirá WhatsApp.</p></div>
+          <div><p class="eyebrow">Solicitud de atención</p><h2>Preparar mensaje de WhatsApp</h2><p>Completa los datos necesarios. Podrás revisar el texto antes de enviarlo.</p></div>
         </div>
-        <form id="appointment-form" class="appointment-form" data-whatsapp-number="${business.contact.whatsappNumber}" novalidate>
-          <div class="form-grid">
-            <label class="field"><span>Tu nombre *</span><input type="text" name="ownerName" autocomplete="name" required maxlength="80" placeholder="Nombre de la persona responsable" aria-describedby="ownerName-error"><small class="field-error" id="ownerName-error" data-error-for="ownerName"></small></label>
-            <label class="field"><span>Nombre de tu mascota *</span><input type="text" name="petName" required maxlength="60" placeholder="Ej. Luna" aria-describedby="petName-error"><small class="field-error" id="petName-error" data-error-for="petName"></small></label>
-            <label class="field"><span>Especie *</span><select name="species" required aria-describedby="species-error"><option value="">Selecciona una opción</option><option>Perro</option><option>Gato</option><option>Otra</option></select><small class="field-error" id="species-error" data-error-for="species"></small></label>
-            <label class="field"><span>Servicio *</span><select name="service" required aria-describedby="service-error"><option value="">Selecciona un servicio</option>${serviceOptions
-              .map((option) => `<option>${option}</option>`)
-              .join("")}</select><small class="field-error" id="service-error" data-error-for="service"></small></label>
-            <label class="field"><span>Fecha preferida *</span><input type="date" name="preferredDate" required aria-describedby="preferredDate-error"><small class="field-error" id="preferredDate-error" data-error-for="preferredDate"></small></label>
-            <label class="field"><span>Horario preferido</span><select name="preferredTime"><option value="Flexible">Flexible</option><option>Mañana</option><option>Tarde</option></select></label>
-            <label class="field field--full"><span>Notas adicionales</span><textarea name="notes" rows="4" maxlength="500" placeholder="Describe brevemente qué necesitas o cualquier dato relevante para la solicitud." aria-describedby="notes-count"></textarea><small id="notes-count"><span data-character-count>0</span>/500 caracteres</small></label>
+        <form class="form-grid" data-appointment-form novalidate>
+          <div class="field">
+            <label for="person-name">Tu nombre <span aria-hidden="true">*</span></label>
+            <input id="person-name" name="personName" type="text" autocomplete="name" required maxlength="80">
+            <p class="field-error" data-error-for="personName" hidden>Escribe tu nombre.</p>
           </div>
-          <label class="checkbox-field"><input type="checkbox" name="privacy" required aria-describedby="privacy-error"><span>Acepto que el mensaje se prepare para enviarlo por WhatsApp y he leído el <a href="${ctx.path(
-            "privacidad/"
-          )}" target="_blank" rel="noopener">aviso de privacidad</a>. *</span></label>
-          <small class="field-error field-error--checkbox" id="privacy-error" data-error-for="privacy"></small>
-          <button class="button button--primary button--full" type="submit"><span>Continuar en WhatsApp</span>${icon(
-            "whatsapp",
-            "button__icon"
-          )}</button>
-          <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+          <div class="field">
+            <label for="pet-name">Nombre de tu mascota</label>
+            <input id="pet-name" name="petName" type="text" autocomplete="off" maxlength="80">
+          </div>
+          <div class="field field--full">
+            <label for="service">Servicio de interés <span aria-hidden="true">*</span></label>
+            <select id="service" name="service" required>
+              <option value="">Selecciona una opción</option>
+              ${serviceOptions.map((service) => `<option value="${service}">${service}</option>`).join("")}
+            </select>
+            <p class="field-error" data-error-for="service" hidden>Selecciona el servicio.</p>
+          </div>
+          <div class="field">
+            <label for="preferred-date">Fecha preferida</label>
+            <input id="preferred-date" name="preferredDate" type="date" data-min-today>
+          </div>
+          <div class="field">
+            <label for="pet-type">Tipo de mascota</label>
+            <select id="pet-type" name="petType">
+              <option value="">Selecciona</option>
+              <option>Perro</option>
+              <option>Gato</option>
+              <option>Otra</option>
+            </select>
+          </div>
+          <div class="field field--full">
+            <label for="message">Motivo o información relevante <span aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="5" required maxlength="800" placeholder="Describe brevemente el motivo de atención, síntomas, servicio o destino del viaje."></textarea>
+            <p class="field-error" data-error-for="message" hidden>Describe brevemente lo que necesitas.</p>
+          </div>
+          <div class="field field--full checkbox-field">
+            <input id="privacy" name="privacy" type="checkbox" required>
+            <label for="privacy">He leído el <a href="${ctx.path("privacidad/")}" target="_blank">aviso de privacidad</a> y entiendo que el formulario abrirá WhatsApp. <span aria-hidden="true">*</span></label>
+            <p class="field-error field-error--checkbox" data-error-for="privacy" hidden>Debes aceptar para continuar.</p>
+          </div>
+          <div class="field field--full">
+            <button class="button button--primary button--full" type="submit"><span>Continuar en WhatsApp</span>${icon("whatsapp", "button__icon")}</button>
+            <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+          </div>
         </form>
       </div>
     </div>
   </section>
 
-  <section class="section section--soft" aria-labelledby="visit-title">
+  <section class="section section--soft" aria-labelledby="ubicacion-contacto-title">
     <div class="container">
-      ${sectionHeading({
-        eyebrow: "Planea tu visita",
-        title: "Ubicación, horarios y contacto directo",
-        text: "Confirma disponibilidad antes de acudir, especialmente para estudios, cirugía, estética y trámites de viaje.",
-        id: "visit-title"
-      })}
+      <div class="section-heading">
+        <p class="eyebrow">Dirección oficial</p>
+        <h2 id="ubicacion-contacto-title">Centro Veterinario Zaragoza en Google Maps</h2>
+        <p class="section-heading__text">${business.contact.fullAddress}. Usa el botón de indicaciones para iniciar la ruta desde tu ubicación.</p>
+      </div>
       ${locationPanel(ctx)}
     </div>
   </section>
 
-  <section class="section" aria-labelledby="hours-detail-title">
+  <section class="section" aria-labelledby="horarios-contacto-title">
     <div class="container hours-detail">
       <div class="hours-detail__intro">
-        ${sectionHeading({
-          eyebrow: "Horarios de atención",
-          title: "Dos áreas, horarios claros",
-          text: "Revisa el horario correspondiente al servicio que buscas.",
-          id: "hours-detail-title"
-        })}
+        <p class="eyebrow">Horarios</p>
+        <h2 id="horarios-contacto-title">Planea tu visita</h2>
+        <p>Los servicios con cita y la existencia de farmacia o microchip deben confirmarse por WhatsApp.</p>
       </div>
-      <article class="hours-detail__card">${icon("stethoscope")}<div><p class="eyebrow">Clínica</p><h3>Lunes a sábado</h3><strong>10:00–18:00</strong><p>Consulta médica y servicios veterinarios.</p></div></article>
-      <article class="hours-detail__card">${icon("sparkle")}<div><p class="eyebrow">Estética</p><h3>Jueves a martes</h3><strong>11:00–17:00</strong><p>Descanso los miércoles.</p></div></article>
+      <article class="hours-detail__card">
+        <span>${icon("stethoscope")}</span>
+        <h3>Clínica veterinaria</h3>
+        <p>${business.hours.clinic.summary}</p>
+        <small>Domingo: sin horario de clínica publicado.</small>
+      </article>
+      <article class="hours-detail__card">
+        <span>${icon("scissors")}</span>
+        <h3>Estética animal</h3>
+        <p>${business.hours.grooming.summary}</p>
+        <small>Descanso: miércoles.</small>
+      </article>
     </div>
   </section>
 
   <section class="contact-secondary-cta">
     <div class="container contact-secondary-cta__inner">
-      <div>${icon("phone")}<span><strong>¿Prefieres llamar?</strong>Habla directamente al ${business.contact.phoneDisplay}</span></div>
-      ${buttonLink({
-        href: `tel:${business.contact.phoneE164}`,
-        label: "Llamar ahora",
-        variant: "light",
-        iconName: "phone",
-        track: "phone_contact_final"
-      })}
+      <div class="contact-secondary-cta__copy"><p class="eyebrow eyebrow--light">Atención directa</p><h2>También puedes escribirnos sin llenar el formulario</h2><p>Incluye el servicio, el nombre de tu mascota y una descripción breve.</p></div>
+      <div class="button-row">
+        ${whatsappLink(
+          ctx,
+          "Hola, Centro Veterinario Zaragoza. Quiero solicitar información. Servicio: ____. Motivo: ____.",
+          "Abrir WhatsApp",
+          "light",
+          "whatsapp_contact_final"
+        )}
+        ${buttonLink({
+          href: business.contact.mapSearchUrl,
+          label: "Ver ubicación",
+          variant: "outline-light",
+          iconName: "pin",
+          external: true,
+          track: "map_contact_final"
+        })}
+      </div>
     </div>
   </section>`;
+
+  return {
+    title: "Contacto, citas y ubicación",
+    description:
+      "Contacta a Centro Veterinario Zaragoza. Teléfono y WhatsApp 55 6815 7821. Dirección: C. 33 161, Ignacio Zaragoza, Venustiano Carranza, C.P. 15000, CDMX.",
+    content,
+    activePath: "contacto/",
+    canonicalPath: "contacto/",
+    breadcrumbs: [{ label: "Contacto", href: "contacto/" }],
+    scripts: ["assets/js/appointment.js"]
+  };
 }

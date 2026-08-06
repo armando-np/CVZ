@@ -1,101 +1,80 @@
 (() => {
   "use strict";
 
-  const configElement = document.getElementById("site-config");
+  const STORAGE_KEY = "cvz_analytics_consent";
   let config = {};
   try {
-    config = JSON.parse(configElement?.textContent || "{}");
+    config = JSON.parse(document.getElementById("site-config")?.textContent || "{}");
   } catch {
     config = {};
   }
 
-  const measurementId = String(config.ga4MeasurementId || "").trim();
-  const isConfigured = /^G-[A-Z0-9]+$/i.test(measurementId);
-  const consentKey = "cvz_analytics_consent_v1";
-  const banner = document.getElementById("analytics-consent");
-  const openButtons = document.querySelectorAll("[data-open-consent]");
   let loaded = false;
+  const measurementId = String(config.ga4MeasurementId || "").trim();
 
-  window.trackEvent = () => {};
-
-  function getConsent() {
+  function storedConsent() {
     try {
-      return localStorage.getItem(consentKey);
+      return localStorage.getItem(STORAGE_KEY) || "";
     } catch {
-      return null;
+      return "";
     }
   }
 
-  function setConsent(value) {
+  function saveConsent(value) {
     try {
-      localStorage.setItem(consentKey, value);
+      localStorage.setItem(STORAGE_KEY, value);
     } catch {
-      // The preference remains valid for the current page even when storage is unavailable.
-    }
-  }
-
-  function hideBanner() {
-    if (banner) banner.hidden = true;
-  }
-
-  function showBanner({ focus = false } = {}) {
-    if (!banner || !isConfigured) return;
-    banner.hidden = false;
-    if (focus) {
-      const firstButton = banner.querySelector("button");
-      window.setTimeout(() => firstButton?.focus(), 50);
+      // The site remains usable when storage is unavailable.
     }
   }
 
   function loadAnalytics() {
-    if (!isConfigured || loaded) return;
+    if (loaded || !measurementId || storedConsent() !== "accepted") return;
     loaded = true;
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag() {
+    window.gtag = window.gtag || function gtag() {
       window.dataLayer.push(arguments);
     };
     window.gtag("js", new Date());
     window.gtag("config", measurementId, {
-      send_page_view: true,
-      allow_google_signals: false
+      anonymize_ip: true,
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+      transport_type: "beacon"
     });
-    window.trackEvent = (name, parameters = {}) => {
-      window.gtag("event", name, parameters);
-    };
 
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-    document.head.appendChild(script);
+    script.dataset.cvzAnalytics = "true";
+    document.head.append(script);
   }
 
-  function acceptAnalytics() {
-    setConsent("accepted");
-    hideBanner();
+  function setConsent(value) {
+    const normalized = value === "accepted" ? "accepted" : "rejected";
+    saveConsent(normalized);
+    if (normalized === "accepted") loadAnalytics();
+    document.dispatchEvent(new CustomEvent("cvz:consent", { detail: normalized }));
+  }
+
+  function track(eventName, parameters = {}) {
+    if (storedConsent() !== "accepted") return;
     loadAnalytics();
+    if (typeof window.gtag === "function") {
+      window.gtag("event", eventName, {
+        ...parameters,
+        page_path: window.location.pathname
+      });
+    }
   }
 
-  function rejectAnalytics() {
-    setConsent("rejected");
-    hideBanner();
-    window.trackEvent = () => {};
-  }
+  window.cvzAnalytics = {
+    getConsent: storedConsent,
+    setConsent,
+    load: loadAnalytics,
+    track
+  };
+  window.cvzTrack = track;
 
-  if (!isConfigured) {
-    hideBanner();
-    openButtons.forEach((button) => {
-      button.hidden = true;
-    });
-    return;
-  }
-
-  banner?.querySelector('[data-consent="accept"]')?.addEventListener("click", acceptAnalytics);
-  banner?.querySelector('[data-consent="reject"]')?.addEventListener("click", rejectAnalytics);
-  openButtons.forEach((button) => {
-    button.addEventListener("click", () => showBanner({ focus: true }));
-  });
-
-  const existingConsent = getConsent();
-  if (existingConsent === "accepted") loadAnalytics();
-  else if (existingConsent !== "rejected") window.setTimeout(showBanner, 600);
+  if (storedConsent() === "accepted") loadAnalytics();
 })();

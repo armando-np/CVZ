@@ -1,48 +1,25 @@
 import { business } from "../data/business.mjs";
-import { consentBanner, floatingActions, footer, header } from "./components.mjs";
-
-function escapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
+import { consentBanner, escapeHtml, floatingActions, footer, header } from "./components.mjs";
 
 function safeJson(value) {
   return JSON.stringify(value).replaceAll("<", "\\u003c");
 }
 
-function dayUrl(day) {
-  return `https://schema.org/${day}`;
+const dayMap = {
+  Lunes: "Monday",
+  Martes: "Tuesday",
+  Miércoles: "Wednesday",
+  Jueves: "Thursday",
+  Viernes: "Friday",
+  Sábado: "Saturday",
+  Domingo: "Sunday"
+};
+
+function schemaDays(days) {
+  return days.map((day) => `https://schema.org/${dayMap[day]}`);
 }
 
 function localBusinessSchema(ctx) {
-  const clinicDays = business.hours.clinic.days.map((day) => {
-    const map = {
-      Lunes: "Monday",
-      Martes: "Tuesday",
-      Miércoles: "Wednesday",
-      Jueves: "Thursday",
-      Viernes: "Friday",
-      Sábado: "Saturday",
-      Domingo: "Sunday"
-    };
-    return dayUrl(map[day]);
-  });
-  const groomingDays = business.hours.grooming.days.map((day) => {
-    const map = {
-      Lunes: "Monday",
-      Martes: "Tuesday",
-      Miércoles: "Wednesday",
-      Jueves: "Thursday",
-      Viernes: "Friday",
-      Sábado: "Saturday",
-      Domingo: "Sunday"
-    };
-    return dayUrl(map[day]);
-  });
-
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -54,9 +31,14 @@ function localBusinessSchema(ctx) {
         description: business.shortDescription,
         url: ctx.siteUrl,
         logo: ctx.absoluteAsset("assets/images/logo.png"),
-        image: ctx.absoluteAsset("assets/images/og-default.png"),
+        image: [
+          ctx.absoluteAsset("assets/images/og-default.png"),
+          ctx.absoluteAsset(business.media.paulina.src),
+          ctx.absoluteAsset(business.media.banner.src)
+        ],
         telephone: business.contact.phoneE164,
         slogan: business.slogan,
+        hasMap: business.contact.mapSearchUrl,
         address: {
           "@type": "PostalAddress",
           streetAddress: business.contact.addressLine,
@@ -72,19 +54,19 @@ function localBusinessSchema(ctx) {
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
-            dayOfWeek: clinicDays,
+            dayOfWeek: schemaDays(business.hours.clinic.days),
             opens: business.hours.clinic.opens,
             closes: business.hours.clinic.closes
           }
         ],
         department: {
           "@type": "LocalBusiness",
-          name: `Estética canina — ${business.name}`,
+          name: `Estética animal — ${business.name}`,
           telephone: business.contact.phoneE164,
           openingHoursSpecification: [
             {
               "@type": "OpeningHoursSpecification",
-              dayOfWeek: groomingDays,
+              dayOfWeek: schemaDays(business.hours.grooming.days),
               opens: business.hours.grooming.opens,
               closes: business.hours.grooming.closes
             }
@@ -177,6 +159,7 @@ export function layout({
     businessName: business.name,
     locale: "es-MX"
   };
+  const imageType = image.endsWith(".webp") ? "image/webp" : "image/png";
 
   return `<!doctype html>
 <html lang="es-MX">
@@ -203,7 +186,7 @@ export function layout({
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${ctx.absoluteAsset(image)}">
-  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="${imageType}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">

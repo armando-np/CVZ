@@ -1,6 +1,15 @@
 import { business, navigation } from "../data/business.mjs";
 import { icon } from "./icons.mjs";
 
+export function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 export function responsiveImage({
   ctx,
   image,
@@ -12,7 +21,6 @@ export function responsiveImage({
   fetchPriority = ""
 }) {
   if (!image?.src) return "";
-
   const srcset = Array.isArray(image.srcset)
     ? image.srcset.map((source) => `${ctx.asset(source.src)} ${source.width}w`).join(", ")
     : "";
@@ -20,16 +28,14 @@ export function responsiveImage({
     `src="${ctx.asset(image.src)}"`,
     `width="${image.width}"`,
     `height="${image.height}"`,
-    `alt="${alt ?? image.alt ?? ""}"`,
+    `alt="${escapeHtml(alt ?? image.alt ?? "")}"`,
     `decoding="${decoding}"`
   ];
-
   if (className) attributes.push(`class="${className}"`);
   if (srcset) attributes.push(`srcset="${srcset}"`);
   if (sizes && srcset) attributes.push(`sizes="${sizes}"`);
   if (loading) attributes.push(`loading="${loading}"`);
   if (fetchPriority) attributes.push(`fetchpriority="${fetchPriority}"`);
-
   return `<img ${attributes.join(" ")}>`;
 }
 
@@ -40,7 +46,8 @@ export function buttonLink({
   iconName = "arrow",
   external = false,
   track = "",
-  className = ""
+  className = "",
+  ariaLabel = ""
 }) {
   const attrs = [
     `href="${href}"`,
@@ -48,13 +55,23 @@ export function buttonLink({
   ];
   if (external) attrs.push('target="_blank"', 'rel="noopener noreferrer"');
   if (track) attrs.push(`data-track="${track}"`);
+  if (ariaLabel) attrs.push(`aria-label="${escapeHtml(ariaLabel)}"`);
   return `<a ${attrs.join(" ")}><span>${label}</span>${icon(iconName, "button__icon")}</a>`;
 }
 
-export function whatsappLink(ctx, message, label = "Agendar por WhatsApp", variant = "primary", track = "whatsapp") {
-  const href = `https://wa.me/${business.contact.whatsappNumber}?text=${encodeURIComponent(message)}`;
+export function whatsappHref(message) {
+  return `https://wa.me/${business.contact.whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+export function whatsappLink(
+  ctx,
+  message,
+  label = "Agendar por WhatsApp",
+  variant = "primary",
+  track = "whatsapp"
+) {
   return buttonLink({
-    href,
+    href: whatsappHref(message),
     label,
     variant,
     iconName: "whatsapp",
@@ -71,7 +88,7 @@ export function sectionHeading({ eyebrow = "", title, text = "", align = "left",
   </div>`;
 }
 
-export function serviceCard(service, { compact = false, ctx = null } = {}) {
+export function serviceCard(service, { compact = false, ctx = null, link = "" } = {}) {
   const hasMedia = Boolean(ctx && service.image);
   const media = hasMedia
     ? `<div class="service-card__media">
@@ -83,12 +100,12 @@ export function serviceCard(service, { compact = false, ctx = null } = {}) {
         <span class="service-card__media-icon">${icon(service.icon)}</span>
       </div>`
     : `<span class="service-card__icon">${icon(service.icon)}</span>`;
-
   return `<article class="service-card${compact ? " service-card--compact" : ""}${hasMedia ? " service-card--with-media" : ""}" id="${service.id}">
     ${media}
     <div class="service-card__body">
       <h3>${service.title}</h3>
       <p>${service.short}</p>
+      ${link ? `<a class="service-card__link" href="${link}">Ver información ${icon("arrow", "mini-icon")}</a>` : ""}
     </div>
   </article>`;
 }
@@ -106,14 +123,14 @@ export function priceCard(item) {
 export function featureCard(feature, index = 0) {
   const icons = ["user", "sparkle", "heart", "shield"];
   return `<article class="feature-card">
-    <span class="feature-card__icon">${icon(icons[index % icons.length])}</span>
+    <span class="feature-card__icon">${icon(feature.icon || icons[index % icons.length])}</span>
     <h3>${feature.title}</h3>
     <p>${feature.text}</p>
   </article>`;
 }
 
-export function faqList(items = business.faq) {
-  return `<div class="faq-list">
+export function faqList(items = business.faq, { narrow = false } = {}) {
+  return `<div class="faq-list${narrow ? " faq-list--narrow" : ""}">
     ${items
       .map(
         (item, index) => `<details class="faq-item"${index === 0 ? " open" : ""}>
@@ -140,31 +157,62 @@ export function breadcrumb(ctx, items) {
     .join("")}</nav>`;
 }
 
-export function pageHero({ ctx, eyebrow, title, text, image, imageAlt = "", actions = "", stats = [] }) {
+export function pageHero({
+  ctx,
+  eyebrow,
+  title,
+  text,
+  image,
+  imageAlt = "",
+  actions = "",
+  stats = [],
+  objectPosition = "center"
+}) {
+  const visual = typeof image === "string"
+    ? `<img src="${ctx.asset(image)}" width="680" height="560" alt="${escapeHtml(imageAlt)}" decoding="async" fetchpriority="high">`
+    : responsiveImage({
+        ctx,
+        image,
+        alt: imageAlt || image.alt,
+        className: "page-hero__photo",
+        sizes: "(max-width: 960px) calc(100vw - 40px), 520px",
+        loading: "eager",
+        fetchPriority: "high"
+      });
   return `<section class="page-hero">
-    <div class="container page-hero__grid">
-      <div class="page-hero__content reveal">
-        ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ""}
-        <h1>${title}</h1>
-        <p class="page-hero__lead">${text}</p>
-        ${actions ? `<div class="button-row">${actions}</div>` : ""}
-        ${
-          stats.length
-            ? `<div class="page-hero__stats">${stats
-                .map(
-                  (stat) => `<div><strong>${stat.value}</strong><span>${stat.label}</span></div>`
-                )
-                .join("")}</div>`
-            : ""
-        }
-      </div>
-      <div class="page-hero__visual reveal reveal--delay">
-        <div class="illustration-shell illustration-shell--page">
-          <img src="${ctx.asset(image)}" width="680" height="560" alt="${imageAlt}" decoding="async" fetchpriority="high">
+    <div class="container">
+      ${breadcrumb(ctx, [{ label: eyebrow || title, href: "" }])}
+      <div class="page-hero__grid">
+        <div class="page-hero__content reveal">
+          ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ""}
+          <h1>${title}</h1>
+          <p class="page-hero__lead">${text}</p>
+          ${actions ? `<div class="button-row">${actions}</div>` : ""}
+          ${
+            stats.length
+              ? `<div class="page-hero__stats">${stats
+                  .map((stat) => `<div><strong>${stat.value}</strong><span>${stat.label}</span></div>`)
+                  .join("")}</div>`
+              : ""
+          }
+        </div>
+        <div class="page-hero__visual reveal reveal--delay">
+          <div class="illustration-shell illustration-shell--page media-shell" style="--media-position:${objectPosition}">${visual}</div>
         </div>
       </div>
     </div>
   </section>`;
+}
+
+export function mediaFigure(ctx, image, caption = "", className = "") {
+  return `<figure class="media-card${className ? ` ${className}` : ""}">
+    ${responsiveImage({
+      ctx,
+      image,
+      sizes: "(max-width: 720px) calc(100vw - 28px), (max-width: 960px) 50vw, 370px"
+    })}
+    ${caption ? `<figcaption>${caption}</figcaption>` : ""}
+  </figure>`;
 }
 
 export function locationPanel(ctx, { compact = false } = {}) {
@@ -189,7 +237,15 @@ export function locationPanel(ctx, { compact = false } = {}) {
           variant: "secondary",
           iconName: "external",
           external: true,
-          track: "map"
+          track: "map_directions"
+        })}
+        ${buttonLink({
+          href: business.contact.mapSearchUrl,
+          label: "Ver en Google Maps",
+          variant: "ghost",
+          iconName: "pin",
+          external: true,
+          track: "map_search"
         })}
         ${buttonLink({
           href: ctx.path("contacto/"),
@@ -202,7 +258,7 @@ export function locationPanel(ctx, { compact = false } = {}) {
     <div class="map-frame">
       <iframe
         src="${business.contact.mapEmbedUrl}"
-        title="Mapa de Centro Veterinario Zaragoza"
+        title="Mapa de Centro Veterinario Zaragoza en C. 33 número 161"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
         allowfullscreen></iframe>
@@ -244,15 +300,14 @@ export function header(ctx, activePath = "") {
       return `<a href="${ctx.path(item.href)}"${active ? ' aria-current="page"' : ""}>${item.label}</a>`;
     })
     .join("");
-
   return `<a class="skip-link" href="#contenido">Saltar al contenido</a>
   <div class="utility-bar">
     <div class="container utility-bar__inner">
       <span>${icon("clock", "mini-icon")} Clínica: ${business.hours.clinic.summary}</span>
-      <a href="${business.contact.mapDirectionsUrl}" target="_blank" rel="noopener noreferrer" data-track="map">${icon(
+      <a href="${business.contact.mapDirectionsUrl}" target="_blank" rel="noopener noreferrer" data-track="map_utility">${icon(
         "pin",
         "mini-icon"
-      )} ${business.contact.neighborhood}, ${business.contact.borough}</a>
+      )} ${business.contact.addressLine}, ${business.contact.neighborhood}</a>
     </div>
   </div>
   <header class="site-header" data-header>
@@ -263,7 +318,7 @@ export function header(ctx, activePath = "") {
       </a>
       <nav class="desktop-nav" aria-label="Navegación principal">${nav}</nav>
       <div class="header-actions">
-        <a class="header-phone" href="tel:${business.contact.phoneE164}" data-track="phone" aria-label="Llamar al ${business.contact.phoneDisplay}">${icon(
+        <a class="header-phone" href="tel:${business.contact.phoneE164}" data-track="phone_header" aria-label="Llamar al ${business.contact.phoneDisplay}">${icon(
           "phone"
         )}<span>${business.contact.phoneDisplay}</span></a>
         ${whatsappLink(
@@ -282,7 +337,7 @@ export function header(ctx, activePath = "") {
     </div>
     <nav class="mobile-nav" id="mobile-menu" aria-label="Navegación móvil" hidden data-mobile-menu>
       <div class="container">${nav}
-        <a class="mobile-nav__phone" href="tel:${business.contact.phoneE164}" data-track="phone">${icon("phone")} ${business.contact.phoneDisplay}</a>
+        <a class="mobile-nav__phone" href="tel:${business.contact.phoneE164}" data-track="phone_mobile">${icon("phone")} ${business.contact.phoneDisplay}</a>
       </div>
     </nav>
   </header>`;
@@ -303,25 +358,23 @@ export function footer(ctx) {
       </div>
       <div>
         <h2>Explora</h2>
-        <ul>${navigation
-          .map((item) => `<li><a href="${ctx.path(item.href)}">${item.label}</a></li>`)
-          .join("")}</ul>
+        <ul>${navigation.map((item) => `<li><a href="${ctx.path(item.href)}">${item.label}</a></li>`).join("")}</ul>
       </div>
       <div>
         <h2>Servicios</h2>
         <ul>
-          <li><a href="${ctx.path("servicios/#consulta-general")}">Consulta general</a></li>
-          <li><a href="${ctx.path("servicios/#ultrasonografia")}">Ultrasonografía</a></li>
-          <li><a href="${ctx.path("servicios/#radiografias")}">Radiografías</a></li>
-          <li><a href="${ctx.path("estetica/")}">Estética canina</a></li>
-          <li><a href="${ctx.path("servicios/#viajes")}">Cartas y chips de viaje</a></li>
+          <li><a href="${ctx.path("servicios/#cardiologia")}">Cardiología</a></li>
+          <li><a href="${ctx.path("servicios/#diagnostico")}">Diagnóstico</a></li>
+          <li><a href="${ctx.path("servicios/#farmacia-veterinaria")}">Farmacia</a></li>
+          <li><a href="${ctx.path("estetica/")}">Estética animal</a></li>
+          <li><a href="${ctx.path("microchip-y-viajes/")}">Microchip y viajes</a></li>
         </ul>
       </div>
       <div>
         <h2>Contacto</h2>
         <ul class="footer-contact">
-          <li>${icon("phone", "mini-icon")} <a href="tel:${business.contact.phoneE164}" data-track="phone">${business.contact.phoneDisplay}</a></li>
-          <li>${icon("pin", "mini-icon")} <a href="${business.contact.mapDirectionsUrl}" target="_blank" rel="noopener noreferrer" data-track="map">${business.contact.addressLine}, ${business.contact.neighborhood}</a></li>
+          <li>${icon("phone", "mini-icon")} <a href="tel:${business.contact.phoneE164}" data-track="phone_footer">${business.contact.phoneDisplay}</a></li>
+          <li>${icon("pin", "mini-icon")} <a href="${business.contact.mapDirectionsUrl}" target="_blank" rel="noopener noreferrer" data-track="map_footer">${business.contact.addressLine}, ${business.contact.neighborhood}</a></li>
           <li>${icon("clock", "mini-icon")} ${business.hours.clinic.summary}</li>
         </ul>
       </div>
@@ -333,12 +386,10 @@ export function footer(ctx) {
   </footer>`;
 }
 
-export function floatingActions(ctx) {
+export function floatingActions() {
   const message = "Hola, Centro Veterinario Zaragoza. Quiero solicitar información y agendar una cita.";
   return `<div class="floating-actions" aria-label="Acciones rápidas">
-    <a class="floating-whatsapp" href="https://wa.me/${business.contact.whatsappNumber}?text=${encodeURIComponent(
-      message
-    )}" target="_blank" rel="noopener noreferrer" data-track="whatsapp_floating" aria-label="Agendar cita por WhatsApp">
+    <a class="floating-whatsapp" href="${whatsappHref(message)}" target="_blank" rel="noopener noreferrer" data-track="whatsapp_floating" aria-label="Agendar cita por WhatsApp">
       ${icon("whatsapp")}<span>WhatsApp</span>
     </a>
   </div>`;

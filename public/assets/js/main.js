@@ -1,123 +1,117 @@
 (() => {
   "use strict";
 
+  const body = document.body;
+  const header = document.querySelector("[data-header]");
   const menuButton = document.querySelector("[data-menu-button]");
   const mobileMenu = document.querySelector("[data-mobile-menu]");
-  const openIcon = document.querySelector("[data-menu-icon-open]");
-  const closeIcon = document.querySelector("[data-menu-icon-close]");
-  const menuLabel = menuButton?.querySelector(".sr-only");
-  const header = document.querySelector("[data-header]");
+  const menuOpenIcon = document.querySelector("[data-menu-icon-open]");
+  const menuCloseIcon = document.querySelector("[data-menu-icon-close]");
 
-  function updateMobileMenuPosition() {
-    if (!mobileMenu || !header) return;
-    const top = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
-    mobileMenu.style.setProperty("--mobile-nav-top", `${top}px`);
+  function setMobileMenu(open) {
+    if (!menuButton || !mobileMenu) return;
+    menuButton.setAttribute("aria-expanded", String(open));
+    mobileMenu.hidden = !open;
+    body.classList.toggle("menu-open", open);
+    if (menuOpenIcon) menuOpenIcon.hidden = open;
+    if (menuCloseIcon) menuCloseIcon.hidden = !open;
+    menuButton.querySelector(".sr-only").textContent = open ? "Cerrar menú" : "Abrir menú";
   }
 
-  function setMenu(open, { restoreFocus = false } = {}) {
-    if (!menuButton || !mobileMenu) return;
-    if (open) updateMobileMenuPosition();
-    menuButton.setAttribute("aria-expanded", String(open));
-    menuButton.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
-    if (menuLabel) menuLabel.textContent = open ? "Cerrar menú" : "Abrir menú";
-    mobileMenu.hidden = !open;
-    if (openIcon) openIcon.hidden = open;
-    if (closeIcon) closeIcon.hidden = !open;
-    document.body.classList.toggle("menu-open", open);
-
-    if (open) {
-      window.setTimeout(() => mobileMenu.querySelector("a")?.focus(), 0);
-    } else if (restoreFocus) {
-      menuButton.focus();
-    }
+  function updateMobileMenuTop() {
+    if (!header) return;
+    const utility = document.querySelector(".utility-bar");
+    const top = (utility?.offsetHeight || 0) + header.offsetHeight;
+    document.documentElement.style.setProperty("--mobile-nav-top", `${top}px`);
   }
 
   menuButton?.addEventListener("click", () => {
-    const open = menuButton.getAttribute("aria-expanded") !== "true";
-    setMenu(open);
+    setMobileMenu(menuButton.getAttribute("aria-expanded") !== "true");
   });
-
-  mobileMenu?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => setMenu(false));
+  mobileMenu?.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setMobileMenu(false);
   });
-
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && menuButton?.getAttribute("aria-expanded") === "true") {
-      setMenu(false, { restoreFocus: true });
-    }
+    if (event.key === "Escape") setMobileMenu(false);
   });
+  window.addEventListener("resize", () => {
+    updateMobileMenuTop();
+    if (window.innerWidth > 960) setMobileMenu(false);
+  });
+  updateMobileMenuTop();
 
-  const updateHeader = () => {
-    header?.classList.toggle("site-header--scrolled", window.scrollY > 12);
-    if (menuButton?.getAttribute("aria-expanded") === "true") updateMobileMenuPosition();
-  };
-  updateHeader();
+  function updateHeader() {
+    header?.classList.toggle("site-header--scrolled", window.scrollY > 8);
+  }
   window.addEventListener("scroll", updateHeader, { passive: true });
-  window.addEventListener(
-    "resize",
-    () => {
-      if (window.matchMedia("(min-width: 961px)").matches) setMenu(false);
-      else updateMobileMenuPosition();
-    },
-    { passive: true }
-  );
+  updateHeader();
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealItems = [...document.querySelectorAll(".reveal")];
+  if (!prefersReducedMotion && "IntersectionObserver" in window) {
+    revealItems.forEach((item) => item.classList.add("is-pending"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8%", threshold: 0.08 }
+    );
+    revealItems.forEach((item) => observer.observe(item));
+  }
 
   document.querySelectorAll("[data-current-year]").forEach((element) => {
     element.textContent = String(new Date().getFullYear());
   });
 
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const revealElements = document.querySelectorAll(".reveal");
-  if (reducedMotion || !("IntersectionObserver" in window)) {
-    revealElements.forEach((element) => element.classList.add("is-visible"));
-  } else {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.remove("is-pending");
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -40px" }
-    );
-
-    revealElements.forEach((element) => {
-      const rect = element.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.95) {
-        element.classList.add("is-visible");
-        return;
-      }
-      element.classList.add("is-pending");
-      observer.observe(element);
-    });
+  const consentBanner = document.getElementById("analytics-consent");
+  function showConsent() {
+    if (!consentBanner) return;
+    consentBanner.hidden = false;
+    requestAnimationFrame(() => consentBanner.classList.add("is-visible"));
+  }
+  function hideConsent() {
+    if (!consentBanner) return;
+    consentBanner.classList.remove("is-visible");
+    window.setTimeout(() => {
+      consentBanner.hidden = true;
+    }, 180);
   }
 
-  document.addEventListener("click", (event) => {
-    const target = event.target.closest("[data-track]");
-    if (!target) return;
-    const id = target.getAttribute("data-track") || "unknown";
-    let eventName = "cta_click";
-    if (id.includes("whatsapp")) eventName = "whatsapp_click";
-    else if (id.includes("phone")) eventName = "phone_click";
-    else if (id.includes("map")) eventName = "map_click";
-    else if (id.includes("instagram")) eventName = "social_click";
-    window.trackEvent?.(eventName, {
-      link_id: id,
-      link_text: target.textContent.trim().slice(0, 80),
-      page_location: window.location.href
-    });
+  const currentConsent = window.cvzAnalytics?.getConsent?.() || "";
+  if (!currentConsent) window.setTimeout(showConsent, 550);
+
+  consentBanner?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-consent]");
+    if (!button) return;
+    const decision = button.dataset.consent === "accept" ? "accepted" : "rejected";
+    window.cvzAnalytics?.setConsent?.(decision);
+    hideConsent();
   });
 
-  document.querySelectorAll(".faq-list").forEach((list) => {
-    list.addEventListener("toggle", (event) => {
-      const details = event.target;
-      if (!(details instanceof HTMLDetailsElement) || !details.open) return;
-      list.querySelectorAll("details[open]").forEach((item) => {
-        if (item !== details) item.open = false;
-      });
-    }, true);
+  document.querySelectorAll("[data-open-consent]").forEach((button) => {
+    button.addEventListener("click", showConsent);
+  });
+
+  document.addEventListener("click", (event) => {
+    const tracked = event.target.closest("[data-track]");
+    if (!tracked) return;
+    const raw = tracked.dataset.track || "interaction";
+    const eventName = raw.replace(/[^a-zA-Z0-9_]/g, "_").toLowerCase();
+    window.cvzTrack?.(eventName, { interaction_type: tracked.tagName.toLowerCase() });
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const id = link.getAttribute("href")?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+      history.pushState(null, "", `#${id}`);
+    });
   });
 })();

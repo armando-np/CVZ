@@ -1,8 +1,8 @@
 import { business } from "../data/business.mjs";
 import {
-  breadcrumb,
   buttonLink,
   featureCard,
+  mediaFigure,
   pageHero,
   responsiveImage,
   sectionHeading,
@@ -10,144 +10,178 @@ import {
 } from "../templates/components.mjs";
 import { icon } from "../templates/icons.mjs";
 
-export const page = {
-  route: "nosotros/",
-  output: "nosotros/index.html",
-  title: "Conoce a Centro Veterinario Zaragoza",
-  description:
-    "Conoce a las MVZ. Paulina E. Ortiz Rivera y Jimena Núñez Pacheco, y el enfoque personalizado, profesional y empático de Centro Veterinario Zaragoza.",
-  activePath: "nosotros/",
-  breadcrumbs: [{ label: "Nosotros", href: "nosotros/" }]
-};
-
 export function render(ctx) {
-  const actions = `${buttonLink({
-    href: ctx.path("servicios/"),
-    label: "Conocer servicios",
-    variant: "primary",
-    iconName: "arrow"
-  })}${whatsappLink(
-    ctx,
-    "Hola, Centro Veterinario Zaragoza. Quiero solicitar información y agendar una cita.",
-    "Hablar con el equipo",
-    "secondary",
-    "whatsapp_about_hero"
-  )}`;
-
-  return `${breadcrumb(ctx, page.breadcrumbs)}
+  const content = `
   ${pageHero({
     ctx,
-    eyebrow: "Acerca de nosotros",
-    title: "Compromiso, empatía y atención personalizada",
-    text: "Tres años trabajando junto a ti para cuidar la salud, el bienestar y la calidad de vida de tu mascota.",
-    image: "assets/images/team-care.svg",
-    imageAlt: "Ilustración del equipo de Centro Veterinario Zaragoza con mascotas",
-    actions,
+    eyebrow: "Nosotros",
+    title: "Un equipo comprometido con la salud de tu mascota",
+    text: "Centro Veterinario Zaragoza reúne atención clínica, diagnóstico, cirugía, farmacia, estética y apoyo para viajes con un trato claro y cercano.",
+    image: business.media.paulina,
+    imageAlt: "MVZ. Paulina E. Ortiz Rivera con un paciente canino",
+    actions: [
+      whatsappLink(
+        ctx,
+        "Hola, Centro Veterinario Zaragoza. Quiero solicitar información y agendar una cita.",
+        "Agendar una cita",
+        "primary",
+        "whatsapp_about_hero"
+      ),
+      buttonLink({ href: ctx.path("servicios/"), label: "Ver servicios", variant: "secondary", iconName: "arrow" })
+    ].join(""),
     stats: [
       { value: "3 años", label: "Trabajando junto a ti" },
-      { value: "2 MVZ", label: "Al frente del centro" },
-      { value: "Integral", label: "Salud, cuidado y belleza" }
-    ]
+      { value: "Atención integral", label: "Clínica, diagnóstico y cuidado" },
+      { value: "Venustiano Carranza", label: "Servicio veterinario local" }
+    ],
+    objectPosition: "center 36%"
   })}
 
-  <section class="section" aria-labelledby="story-title">
-    <div class="container story-layout">
-      <div class="story-layout__content">
-        ${sectionHeading({
-          eyebrow: "Nuestra forma de trabajar",
-          title: "Cuidamos a tu mascota como parte importante de tu familia",
-          text: "Centro Veterinario Zaragoza reúne servicios médicos, diagnósticos, estética y apoyo para viajes, siempre buscando ofrecer calidad y profesionalismo.",
-          id: "story-title"
-        })}
-        <blockquote>“Previene, cuida y protege a quienes más amas.”</blockquote>
-        <p>La atención se distingue por ser jovial, empática y personalizada, con un compromiso permanente de actualización.</p>
-      </div>
-      <div class="story-layout__visual">
-        <img src="${ctx.asset("assets/images/clinic-community.svg")}" width="680" height="560" alt="Ilustración de una familia con sus mascotas frente al centro veterinario" loading="lazy">
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--soft" aria-labelledby="values-title">
+  <section class="section" aria-labelledby="equipo-title">
     <div class="container">
       ${sectionHeading({
-        eyebrow: "Lo que nos distingue",
-        title: "Principios presentes en cada atención",
-        text: "Una experiencia centrada en la mascota y en la confianza de su familia.",
+        eyebrow: "Médicas veterinarias",
+        title: "Conoce al equipo",
+        text: "Atención profesional, comunicación directa con las familias y seguimiento de acuerdo con las necesidades de cada paciente.",
         align: "center",
-        id: "values-title"
-      })}
-      <div class="feature-grid">
-        ${business.differentiators.map(featureCard).join("")}
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="team-about-title">
-    <div class="container">
-      ${sectionHeading({
-        eyebrow: "Equipo profesional",
-        title: "Conoce a quienes dirigen el centro",
-        text: "Médicas Veterinarias Zootecnistas comprometidas con la atención cercana y profesional.",
-        align: "center",
-        id: "team-about-title"
+        id: "equipo-title"
       })}
       <div class="team-grid team-grid--large">
         ${business.owners
-          .map((owner, index) => {
-            const hasPhoto = Boolean(owner.photo);
-            return `<article class="team-profile">
-          <div class="team-profile__visual team-profile__visual--${index + 1}${hasPhoto ? " team-profile__visual--photo" : ""}">
-            ${
-              hasPhoto
-                ? responsiveImage({
-                    ctx,
-                    image: owner.photo,
-                    alt: "",
-                    sizes: "(max-width: 480px) 115px, (max-width: 720px) 110px, 170px"
-                  })
-                : `<span>${owner.initials}</span>`
-            }
-            ${icon("paw", "team-profile__paw")}
-          </div>
-          <div><p class="eyebrow">Dirección médica</p><h3>${owner.name}</h3><p>${owner.role}</p><ul><li>${icon(
-              "check"
-            )} Atención personalizada</li><li>${icon("check")} Trato empático</li><li>${icon(
-              "check"
-            )} Actualización continua</li></ul></div>
-        </article>`;
-          })
+          .map(
+            (owner, index) => `<article class="team-profile">
+              <div class="team-profile__visual team-profile__visual--photo${index ? " team-profile__visual--2" : ""}">
+                ${responsiveImage({
+                  ctx,
+                  image: owner.photo,
+                  alt: owner.photo.alt,
+                  sizes: "(max-width: 480px) 150px, 170px"
+                })}
+                <span class="team-profile__paw">${icon("paw")}</span>
+              </div>
+              <div>
+                <p class="eyebrow">Equipo médico</p>
+                <h3>${owner.name}</h3>
+                <p>${owner.role}</p>
+                <ul>
+                  <li>${icon("check")} Atención veterinaria con orientación clara</li>
+                  <li>${icon("check")} Trato respetuoso para pacientes y tutores</li>
+                  <li>${icon("check")} Trabajo coordinado con los servicios del centro</li>
+                </ul>
+              </div>
+            </article>`
+          )
           .join("")}
       </div>
     </div>
   </section>
 
-  <section class="section section--soft" aria-labelledby="choice-title">
+  <section class="section section--soft" aria-labelledby="paulina-title">
+    <div class="container content-split">
+      <div class="content-split__media reveal">
+        ${mediaFigure(ctx, business.media.paulina, "MVZ. Paulina E. Ortiz Rivera con un paciente")}
+      </div>
+      <div class="content-split__copy reveal reveal--delay">
+        ${sectionHeading({
+          eyebrow: "Atención cercana",
+          title: "MVZ. Paulina E. Ortiz Rivera",
+          text: "Parte del equipo médico de Centro Veterinario Zaragoza, con participación en la atención cotidiana de pacientes y en la orientación a sus familias.",
+          id: "paulina-title"
+        })}
+        <div class="feature-list">
+          <div>${icon("stethoscope")}<span><strong>Valoración veterinaria</strong>Atención clínica de acuerdo con el motivo de consulta.</span></div>
+          <div>${icon("heart")}<span><strong>Trato empático</strong>Manejo cuidadoso y comunicación directa.</span></div>
+          <div>${icon("document")}<span><strong>Orientación</strong>Indicaciones y seguimiento explicados de forma clara.</span></div>
+        </div>
+        <div class="button-row">
+          ${whatsappLink(
+            ctx,
+            "Hola, Centro Veterinario Zaragoza. Quiero solicitar una cita veterinaria.",
+            "Solicitar cita",
+            "primary",
+            "whatsapp_paulina_about"
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="forma-trabajo-title">
+    <div class="container story-layout">
+      <div class="story-layout__content reveal">
+        ${sectionHeading({
+          eyebrow: "Nuestra forma de trabajar",
+          title: "Cuidado profesional desde la consulta hasta el seguimiento",
+          text: "Buscamos que cada familia comprenda el motivo de la valoración, los estudios sugeridos y las siguientes acciones del plan de atención.",
+          id: "forma-trabajo-title"
+        })}
+        <div class="check-list check-list--single">
+          <span>${icon("check", "mini-icon")} Escucha del motivo de consulta</span>
+          <span>${icon("check", "mini-icon")} Exploración y valoración veterinaria</span>
+          <span>${icon("check", "mini-icon")} Explicación de estudios o procedimientos</span>
+          <span>${icon("check", "mini-icon")} Indicaciones y seguimiento</span>
+        </div>
+      </div>
+      <div class="story-layout__visual reveal reveal--delay">
+        ${mediaFigure(ctx, business.media.paulinaProcedure, "Atención de un paciente felino durante un procedimiento veterinario")}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="diferenciadores-title">
+    <div class="container">
+      ${sectionHeading({
+        eyebrow: "Lo que nos guía",
+        title: "Principios de atención",
+        text: "El sitio conserva los valores definidos para Centro Veterinario Zaragoza: cercanía, actualización y servicios integrales.",
+        align: "center",
+        id: "diferenciadores-title"
+      })}
+      <div class="feature-grid">
+        ${business.differentiators.map((feature, index) => featureCard(feature, index)).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="instalaciones-title">
     <div class="container choice-panel">
       <div>
-        <p class="eyebrow">Una opción integral</p>
-        <h2 id="choice-title">Salud, belleza, cuidado y productos para consentir a quienes más amas</h2>
-        <p>Encuentra una amplia variedad de servicios con el objetivo de brindar atención de calidad y profesionalismo.</p>
+        <p class="eyebrow">Un solo centro</p>
+        <h2 id="instalaciones-title">Servicios clínicos y de cuidado en la misma ubicación</h2>
+        <p>Consulta, cardiología, imagen, laboratorio, cirugía, farmacia, microchip, documentación para viajes y estética animal.</p>
       </div>
       <div class="choice-panel__list">
-        <span>${icon("stethoscope")}Servicios médicos</span>
-        <span>${icon("ultrasound")}Diagnóstico</span>
-        <span>${icon("sparkle")}Estética</span>
-        <span>${icon("travel")}Apoyo para viajes</span>
+        <span>${icon("stethoscope")} Clínica veterinaria</span>
+        <span>${icon("ultrasound")} Diagnóstico</span>
+        <span>${icon("pharmacy")} Farmacia</span>
+        <span>${icon("scissors")} Estética animal</span>
       </div>
     </div>
   </section>
 
   <section class="final-cta">
     <div class="container final-cta__inner">
-      <div><p class="eyebrow eyebrow--light">Conoce nuestra atención</p><h2>Agenda una visita a Centro Veterinario Zaragoza</h2><p>Estamos en Ignacio Zaragoza, Venustiano Carranza, Ciudad de México.</p></div>
-      ${whatsappLink(
-        ctx,
-        "Hola, Centro Veterinario Zaragoza. Quiero agendar una visita para mi mascota.",
-        "Agendar por WhatsApp",
-        "light",
-        "whatsapp_about_final"
-      )}
+      <div><p class="eyebrow eyebrow--light">Conoce nuestra atención</p><h2>Visítanos en C. 33 161</h2><p>Estamos en la colonia Ignacio Zaragoza, alcaldía Venustiano Carranza, Ciudad de México.</p></div>
+      <div class="button-row">
+        ${buttonLink({
+          href: business.contact.mapDirectionsUrl,
+          label: "Abrir indicaciones",
+          variant: "light",
+          iconName: "pin",
+          external: true,
+          track: "map_about_final"
+        })}
+      </div>
     </div>
   </section>`;
+
+  return {
+    title: "Nuestro equipo veterinario",
+    description:
+      "Conoce a la MVZ. Paulina E. Ortiz Rivera y a la MVZ. Jimena Núñez Pacheco, equipo de Centro Veterinario Zaragoza en Venustiano Carranza, CDMX.",
+    content,
+    activePath: "nosotros/",
+    canonicalPath: "nosotros/",
+    breadcrumbs: [{ label: "Nosotros", href: "nosotros/" }]
+  };
 }

@@ -4,7 +4,7 @@ import {
   faqList,
   featureCard,
   locationPanel,
-  priceCard,
+  mediaFigure,
   promoBanner,
   responsiveImage,
   sectionHeading,
@@ -13,47 +13,46 @@ import {
 } from "../templates/components.mjs";
 import { icon } from "../templates/icons.mjs";
 
-export const page = {
-  route: "",
-  output: "index.html",
-  title: "Veterinaria en Venustiano Carranza",
-  description:
-    "Consulta veterinaria, ultrasonografía, radiografías, cirugía, laboratorio, estética canina y servicios para viaje en Ignacio Zaragoza, CDMX.",
-  activePath: "",
-  faqItems: business.faq
-};
-
 export function render(ctx) {
-  const medicalPreview = business.services.medical.slice(0, 6);
-  const whatsapp = whatsappLink(
-    ctx,
-    "Hola, Centro Veterinario Zaragoza. Quiero solicitar información y agendar una cita.",
-    "Agendar por WhatsApp",
-    "primary",
-    "whatsapp_hero"
-  );
+  const featuredServices = [
+    business.services.medical.find((item) => item.id === "consulta-general"),
+    business.services.medical.find((item) => item.id === "cardiologia"),
+    business.services.medical.find((item) => item.id === "ultrasonografia"),
+    business.services.medical.find((item) => item.id === "laboratorio-clinico"),
+    business.services.medical.find((item) => item.id === "cirugia"),
+    business.services.medical.find((item) => item.id === "microchip-viajes")
+  ];
+  const homeFaq = business.faq.filter((_, index) => [0, 2, 3, 5, 6, 8].includes(index));
 
-  return `<section class="home-hero">
+  const content = `
+  <section class="home-hero">
     <div class="home-hero__pattern" aria-hidden="true"></div>
     <div class="container home-hero__grid">
       <div class="home-hero__content reveal">
-        <p class="eyebrow">Centro veterinario en Venustiano Carranza</p>
-        <h1>Cuidado médico y bienestar para quienes más amas</h1>
-        <p class="home-hero__lead">${business.description}</p>
+        <p class="eyebrow">Atención veterinaria en Venustiano Carranza</p>
+        <h1>Salud, diagnóstico y cuidado integral para tu mascota</h1>
+        <p class="home-hero__lead">Consulta, cardiología con cita, ultrasonografía, laboratorio, rayos X, cirugía, farmacia veterinaria, estética y apoyo documental para viajar.</p>
         <div class="button-row">
-          ${whatsapp}
+          ${whatsappLink(
+            ctx,
+            "Hola, Centro Veterinario Zaragoza. Quiero solicitar información y agendar una cita.",
+            "Agendar por WhatsApp",
+            "primary",
+            "whatsapp_home_hero"
+          )}
           ${buttonLink({
-            href: `tel:${business.contact.phoneE164}`,
-            label: "Llamar ahora",
+            href: business.contact.mapDirectionsUrl,
+            label: "Cómo llegar",
             variant: "secondary",
-            iconName: "phone",
-            track: "phone_hero"
+            iconName: "pin",
+            external: true,
+            track: "map_home_hero"
           })}
         </div>
         <div class="hero-proof" aria-label="Información destacada">
-          <div><strong>$300 MXN</strong><span>Consulta general</span></div>
-          <div><strong>Sin costo</strong><span>Evaluación prequirúrgica</span></div>
-          <div><strong>3 años</strong><span>Trabajando junto a ti</span></div>
+          <div><strong>Consulta $300</strong><span>Valoración médica general</span></div>
+          <div><strong>Diagnóstico</strong><span>Ultrasonido, laboratorio y radiografías</span></div>
+          <div><strong>Atención integral</strong><span>Clínica, farmacia, estética y viajes</span></div>
         </div>
       </div>
       <div class="home-hero__visual reveal reveal--delay">
@@ -66,29 +65,39 @@ export function render(ctx) {
             loading: "eager",
             fetchPriority: "high"
           })}
-          <div class="floating-card floating-card--one">${icon("stethoscope")}<span><strong>Atención integral</strong>Salud y diagnóstico</span></div>
-          <div class="floating-card floating-card--two">${icon("sparkle")}<span><strong>Estética canina</strong>Cuidado y estilo</span></div>
+          <div class="floating-card floating-card--one">${icon("heart")}<span><strong>Trato cercano</strong>Cuidado con respeto y paciencia</span></div>
+          <div class="floating-card floating-card--two">${icon("clock")}<span><strong>Lun.–sáb.</strong>10:00 a 18:00</span></div>
         </div>
       </div>
     </div>
-    <div class="container home-hero__quickbar">
-      <a href="${ctx.path("servicios/")}">${icon("stethoscope")}<span><strong>Servicios médicos</strong>Consulta, imagen y cirugía</span>${icon("arrow", "quickbar__arrow")}</a>
-      <a href="${ctx.path("estetica/")}">${icon("sparkle")}<span><strong>Spa y estética</strong>Baño, deslanado y estilismo</span>${icon("arrow", "quickbar__arrow")}</a>
-      <a href="${ctx.path("contacto/")}">${icon("calendar")}<span><strong>Agenda sencilla</strong>Prepara tu solicitud por WhatsApp</span>${icon("arrow", "quickbar__arrow")}</a>
+    <div class="container home-hero__quickbar" aria-label="Servicios de acceso rápido">
+      <a href="${ctx.path("servicios/#cardiologia")}">
+        ${icon("cardiology")}<span><strong>Cardiología</strong>Con cita previa por WhatsApp</span>${icon("arrow", "quickbar__arrow")}
+      </a>
+      <a href="${ctx.path("microchip-y-viajes/")}">
+        ${icon("chip")}<span><strong>Microchip</strong>Aplicación sin previa cita</span>${icon("arrow", "quickbar__arrow")}
+      </a>
+      <a href="${ctx.path("servicios/#farmacia-veterinaria")}">
+        ${icon("pharmacy")}<span><strong>Farmacia veterinaria</strong>Pedido, receta y cotización</span>${icon("arrow", "quickbar__arrow")}
+      </a>
     </div>
   </section>
 
-  <section class="section section--services" aria-labelledby="services-title">
+  <section class="section section--services" aria-labelledby="servicios-destacados">
     <div class="container">
       ${sectionHeading({
         eyebrow: "Servicios veterinarios",
-        title: "Atención, diagnóstico y acompañamiento en un mismo lugar",
-        text: "Una oferta integral para cuidar la salud, el bienestar y las necesidades de viaje de tu mascota.",
-        align: "center",
-        id: "services-title"
+        title: "Atención coordinada para cada etapa",
+        text: "Integramos consulta, diagnóstico, procedimientos, farmacia y documentación de viaje. La disponibilidad de los servicios con cita se confirma por WhatsApp.",
+        id: "servicios-destacados"
       })}
       <div class="service-grid">
-        ${medicalPreview.map((service) => serviceCard(service, { ctx })).join("")}
+        ${featuredServices
+          .map((service) => {
+            const link = service.id === "microchip-viajes" ? ctx.path("microchip-y-viajes/") : ctx.path(`servicios/#${service.id}`);
+            return serviceCard(service, { ctx, link });
+          })
+          .join("")}
       </div>
       <div class="section-actions">
         ${buttonLink({
@@ -101,169 +110,195 @@ export function render(ctx) {
     </div>
   </section>
 
-  ${promoBanner(ctx)}
-
-  <section class="section section--soft" aria-labelledby="prices-title">
+  <section class="section section--soft" aria-labelledby="diagnostico-real">
     <div class="container">
       <div class="split-heading">
         ${sectionHeading({
-          eyebrow: "Precios transparentes",
-          title: "Costos de referencia para servicios frecuentes",
-          text: "Confirma disponibilidad y cualquier indicación previa al agendar.",
-          id: "prices-title"
+          eyebrow: "Diagnóstico",
+          title: "Imagen y laboratorio dentro de tu plan de atención",
+          text: "Los estudios se realizan como apoyo a la valoración clínica y se indican según las necesidades de cada paciente.",
+          id: "diagnostico-real"
         })}
-        <div class="split-heading__note">${icon("shield")}<p><strong>Agenda informada</strong>Recibe orientación directa antes de tu visita.</p></div>
+        <div class="split-heading__note">${icon("info")}<p><strong>Interpretación profesional</strong>Las imágenes del sitio son ilustrativas del servicio y no constituyen un diagnóstico.</p></div>
       </div>
-      <div class="price-grid">
-        ${business.prices.map(priceCard).join("")}
-      </div>
-      <p class="price-disclaimer">Precios expresados en pesos mexicanos y sujetos a confirmación directa con el centro.</p>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="why-title">
-    <div class="container why-grid">
-      <div class="why-visual reveal">
-        <div class="illustration-shell">
-          <img src="${ctx.asset("assets/images/clinic-care.svg")}" width="680" height="560" alt="Ilustración de atención veterinaria cercana y profesional" loading="lazy">
-        </div>
-      </div>
-      <div class="why-content">
-        ${sectionHeading({
-          eyebrow: "Por qué elegirnos",
-          title: "Profesionalismo con un trato cercano",
-          text: "Un equipo comprometido con ofrecer una experiencia clara, respetuosa y personalizada.",
-          id: "why-title"
-        })}
-        <div class="feature-list">
-          ${business.differentiators.map(featureCard).join("")}
-        </div>
+      <div class="home-feature-grid">
+        <article class="photo-feature photo-feature--portrait reveal">
+          ${responsiveImage({
+            ctx,
+            image: business.media.ultrasoundConsult,
+            sizes: "(max-width: 760px) calc(100vw - 28px), 48vw"
+          })}
+          <div><p class="eyebrow">Ultrasonografía</p><h3>Evaluación por imagen con cita</h3><p>Confirma indicaciones de preparación y disponibilidad antes del estudio.</p></div>
+        </article>
+        <article class="photo-feature photo-feature--portrait reveal reveal--delay">
+          ${responsiveImage({
+            ctx,
+            image: business.media.laboratory,
+            sizes: "(max-width: 760px) calc(100vw - 28px), 48vw"
+          })}
+          <div><p class="eyebrow">Laboratorio clínico</p><h3>Apoyo diagnóstico para decisiones médicas</h3><p>Estudios solicitados de acuerdo con la valoración del paciente.</p></div>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="section section--grooming" aria-labelledby="grooming-title">
-    <div class="container grooming-feature">
-      <div class="grooming-feature__content">
-        ${sectionHeading({
-          eyebrow: "Spa y estética canina",
-          title: "Cuidado que también se nota",
-          text: "Baño, deslanado, corte de uñas, estilismo canino y colorimetría con atención amable.",
-          id: "grooming-title"
+  ${promoBanner(ctx)}
+
+  <section class="section section--travel" aria-labelledby="viajar-identificado">
+    <div class="container travel-layout travel-layout--photo">
+      <div class="travel-photo reveal">
+        ${responsiveImage({
+          ctx,
+          image: business.media.passport,
+          sizes: "(max-width: 960px) calc(100vw - 40px), 520px"
         })}
-        <ul class="check-list">
-          ${business.services.grooming
-            .map((service) => `<li>${icon("check")}<span>${service.title}</span></li>`)
-            .join("")}
+      </div>
+      <div class="reveal reveal--delay">
+        ${sectionHeading({
+          eyebrow: "Microchip y documentación",
+          title: "Identificación segura para que tu mascota viaje a tu lado",
+          text: "Aplicación de microchip sin previa cita, lectura compatible con ISO 11784/11785, carnet o pasaporte veterinario y apoyo con cartas para viajes nacionales e internacionales.",
+          id: "viajar-identificado"
+        })}
+        <ul class="travel-points">
+          <li>${icon("chip")}<span><strong>Microchip y lectura</strong>Identificación individual y comprobación del número.</span></li>
+          <li>${icon("passport")}<span><strong>Carnet o pasaporte</strong>Documentación clínica concentrada para el paciente.</span></li>
+          <li>${icon("document")}<span><strong>Orientación documental</strong>Revisión de lo solicitado por destino o transportista.</span></li>
         </ul>
         <div class="button-row">
           ${buttonLink({
-            href: ctx.path("estetica/"),
-            label: "Conocer estética",
-            variant: "primary",
+            href: ctx.path("microchip-y-viajes/"),
+            label: "Ver información para viajes",
+            variant: "light",
             iconName: "arrow"
           })}
           ${whatsappLink(
             ctx,
-            "Hola, Centro Veterinario Zaragoza. Quiero solicitar una cotización para estética canina.",
-            "Pedir cotización",
-            "secondary",
-            "whatsapp_grooming_home"
+            "Hola, Centro Veterinario Zaragoza. Quiero información sobre microchip, carnet o documentación para viajar con mi mascota.",
+            "Consultar por WhatsApp",
+            "outline-light",
+            "whatsapp_travel_home"
           )}
         </div>
-        <p class="hours-pill">${icon("clock")} ${business.hours.grooming.summary} · Descanso: ${business.hours.grooming.closedDay}</p>
-      </div>
-      <div class="grooming-feature__visual">
-        <img src="${ctx.asset("assets/images/grooming.svg")}" width="680" height="560" alt="Ilustración de un perro durante un servicio de estética canina" loading="lazy">
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="team-title">
+  <section class="section" aria-labelledby="estetica-resultados">
+    <div class="container">
+      <div class="content-split content-split--reverse">
+        <div class="content-split__copy reveal">
+          ${sectionHeading({
+            eyebrow: "Estética y spa animal",
+            title: "Higiene, estilismo y cuidado del manto",
+            text: "Baño, deslanado, corte de uñas, estilismo y colorimetría con valoración y cotización según el servicio.",
+            id: "estetica-resultados"
+          })}
+          <div class="check-list">
+            <span>${icon("check", "mini-icon")} Atención de jueves a martes</span>
+            <span>${icon("check", "mini-icon")} Horario de 11:00 a 17:00</span>
+            <span>${icon("check", "mini-icon")} Miércoles: descanso</span>
+            <span>${icon("check", "mini-icon")} Cotización por WhatsApp</span>
+          </div>
+          <div class="button-row">
+            ${buttonLink({ href: ctx.path("estetica/"), label: "Ver galería de estética", variant: "secondary", iconName: "arrow" })}
+          </div>
+        </div>
+        <div class="content-split__media reveal reveal--delay">
+          ${mediaFigure(ctx, business.media.grooming[2], "Resultado de un servicio de estilismo animal")}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="equipo-cvz">
     <div class="container">
       ${sectionHeading({
         eyebrow: "Nuestro equipo",
-        title: "Médicas veterinarias comprometidas con tu mascota",
-        text: "Centro Veterinario Zaragoza es dirigido por profesionales que combinan atención personalizada, empatía y actualización continua.",
+        title: "Atención profesional con trato cercano",
+        text: "Conoce a las médicas veterinarias que forman parte de Centro Veterinario Zaragoza.",
         align: "center",
-        id: "team-title"
+        id: "equipo-cvz"
       })}
-      <div class="team-grid">
+      <div class="team-grid team-grid--photo-cards">
         ${business.owners
-          .map((owner) => {
-            const avatar = owner.photo?.avatar;
-            return `<article class="team-card">
-          <div class="team-card__avatar${avatar ? " team-card__avatar--photo" : ""}">
-            ${
-              avatar
-                ? responsiveImage({ ctx, image: avatar, alt: "", sizes: "78px" })
-                : `<span>${owner.initials}</span>`
-            }
-            ${icon("paw", "team-card__paw")}
-          </div>
-          <div><h3>${owner.name}</h3><p>${owner.role}</p></div>
-        </article>`;
-          })
+          .map(
+            (owner) => `<article class="team-card team-card--photo">
+              <span class="team-card__avatar team-card__avatar--photo">
+                ${responsiveImage({ ctx, image: owner.photo.avatar, alt: "" })}
+              </span>
+              <span class="team-card__paw">${icon("paw")}</span>
+              <div><h3>${owner.name}</h3><p>${owner.role}</p></div>
+            </article>`
+          )
           .join("")}
+      </div>
+      <div class="section-actions">
+        ${buttonLink({ href: ctx.path("nosotros/"), label: "Conocer al equipo", variant: "secondary", iconName: "arrow" })}
       </div>
     </div>
   </section>
 
-  <section class="section section--soft" aria-labelledby="location-title">
+  <section class="section" aria-labelledby="ubicacion-cvz">
     <div class="container">
       ${sectionHeading({
-        eyebrow: "Ubicación y horarios",
-        title: "Estamos en la colonia Ignacio Zaragoza",
-        text: "Consulta el mapa, revisa nuestros horarios y agenda antes de tu visita.",
-        id: "location-title"
+        eyebrow: "Ubicación",
+        title: "Encuéntranos en la colonia Ignacio Zaragoza",
+        text: business.contact.fullAddress,
+        id: "ubicacion-cvz"
       })}
       ${locationPanel(ctx)}
     </div>
   </section>
 
-  <section class="section" aria-labelledby="faq-title">
+  <section class="section section--soft" aria-labelledby="preguntas-frecuentes">
     <div class="container faq-layout">
       <div>
         ${sectionHeading({
           eyebrow: "Preguntas frecuentes",
-          title: "Información para planear tu visita",
-          text: "Respuestas rápidas sobre precios, horarios, ubicación y citas.",
-          id: "faq-title"
+          title: "Información antes de acudir",
+          text: "Consulta horarios, citas, microchip, farmacia y ubicación. Para confirmar disponibilidad, escríbenos por WhatsApp.",
+          id: "preguntas-frecuentes"
         })}
         <div class="faq-contact-card">
           ${icon("whatsapp")}
-          <div><strong>¿Necesitas confirmar algo?</strong><p>Escríbenos y recibe atención directa.</p></div>
-          <a href="https://wa.me/${business.contact.whatsappNumber}?text=${encodeURIComponent(
-            "Hola, Centro Veterinario Zaragoza. Tengo una pregunta antes de agendar."
-          )}" target="_blank" rel="noopener noreferrer" data-track="whatsapp_faq">Abrir WhatsApp</a>
+          <h3>¿Tienes otra pregunta?</h3>
+          <p>Envíanos un mensaje con el servicio que necesitas.</p>
+          ${whatsappLink(
+            ctx,
+            "Hola, Centro Veterinario Zaragoza. Tengo una pregunta sobre sus servicios.",
+            "Escribir por WhatsApp",
+            "primary",
+            "whatsapp_faq_home"
+          )}
         </div>
       </div>
-      ${faqList()}
+      ${faqList(homeFaq)}
     </div>
   </section>
 
   <section class="final-cta">
     <div class="container final-cta__inner">
-      <div>
-        <p class="eyebrow eyebrow--light">Tu mascota, nuestra pasión</p>
-        <h2>Da el siguiente paso para cuidar su salud y bienestar</h2>
-        <p>Solicita información, confirma disponibilidad y agenda por WhatsApp.</p>
-      </div>
+      <div><p class="eyebrow eyebrow--light">Estamos para orientarte</p><h2>Agenda la atención que tu mascota necesita</h2><p>Describe brevemente el motivo de consulta y te ayudamos a confirmar el servicio y la disponibilidad.</p></div>
       <div class="button-row">
         ${whatsappLink(
           ctx,
-          "Hola, Centro Veterinario Zaragoza. Quiero agendar una cita para mi mascota.",
-          "Agendar ahora",
+          "Hola, Centro Veterinario Zaragoza. Quiero agendar atención para mi mascota.",
+          "Agendar por WhatsApp",
           "light",
-          "whatsapp_final"
+          "whatsapp_final_home"
         )}
-        ${buttonLink({
-          href: ctx.path("contacto/"),
-          label: "Ver contacto",
-          variant: "outline-light",
-          iconName: "arrow"
-        })}
       </div>
     </div>
   </section>`;
+
+  return {
+    title: "Veterinaria, diagnóstico, estética y viajes en CDMX",
+    description:
+      "Centro Veterinario Zaragoza en C. 33 161, Venustiano Carranza. Consulta, cardiología, ultrasonido, laboratorio, rayos X, farmacia, estética, microchip y documentación para viajes.",
+    content,
+    activePath: "",
+    canonicalPath: "",
+    faqItems: homeFaq
+  };
 }
