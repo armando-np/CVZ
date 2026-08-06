@@ -335,12 +335,12 @@ export function header(ctx, activePath = "") {
         <span data-menu-icon-close hidden>${icon("close")}</span>
       </button>
     </div>
-    <nav class="mobile-nav" id="mobile-menu" aria-label="Navegación móvil" hidden data-mobile-menu>
-      <div class="container">${nav}
-        <a class="mobile-nav__phone" href="tel:${business.contact.phoneE164}" data-track="phone_mobile">${icon("phone")} ${business.contact.phoneDisplay}</a>
-      </div>
-    </nav>
-  </header>`;
+  </header>
+  <nav class="mobile-nav" id="mobile-menu" aria-label="Navegación móvil" aria-hidden="true" hidden data-mobile-menu>
+    <div class="container">${nav}
+      <a class="mobile-nav__phone" href="tel:${business.contact.phoneE164}" data-track="phone_mobile">${icon("phone")} ${business.contact.phoneDisplay}</a>
+    </div>
+  </nav>`;
 }
 
 export function footer(ctx) {

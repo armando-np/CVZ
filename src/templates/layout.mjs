@@ -160,6 +160,8 @@ export function layout({
     locale: "es-MX"
   };
   const imageType = image.endsWith(".webp") ? "image/webp" : "image/png";
+  const assetVersion = "1.1.2";
+  const versionedAsset = (assetPath) => `${ctx.asset(assetPath)}?v=${assetVersion}`;
 
   return `<!doctype html>
 <html lang="es-MX">
@@ -197,12 +199,12 @@ export function layout({
   <meta name="twitter:image:alt" content="${escapeHtml(imageAlt)}">
   ${ctx.googleSiteVerification ? `<meta name="google-site-verification" content="${escapeHtml(ctx.googleSiteVerification)}">` : ""}
   ${ctx.bingSiteVerification ? `<meta name="msvalidate.01" content="${escapeHtml(ctx.bingSiteVerification)}">` : ""}
-  <link rel="stylesheet" href="${ctx.asset("assets/css/styles.css")}">
+  <link rel="stylesheet" href="${versionedAsset("assets/css/styles.css")}">
   ${schemas.map((schema) => `<script type="application/ld+json">${safeJson(schema)}</script>`).join("\n  ")}
   <script id="site-config" type="application/json">${safeJson(config)}</script>
-  <script src="${ctx.asset("assets/js/analytics.js")}" defer></script>
-  <script src="${ctx.asset("assets/js/main.js")}" defer></script>
-  ${scripts.map((script) => `<script src="${ctx.asset(script)}" defer></script>`).join("\n  ")}
+  <script src="${versionedAsset("assets/js/analytics.js")}" defer></script>
+  <script src="${versionedAsset("assets/js/main.js")}" defer></script>
+  ${scripts.map((script) => `<script src="${versionedAsset(script)}" defer></script>`).join("\n  ")}
 </head>
 <body class="${bodyClass}">
   ${header(ctx, activePath)}
