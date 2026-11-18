@@ -1,70 +1,213 @@
+const image = (src, width, height, alt, srcset = [], extra = {}) => ({
+  src,
+  width,
+  height,
+  alt,
+  srcset,
+  ...extra
+});
+
 const media = {
-  banner: {
-    src: "assets/images/banner-veterinaria-1200.webp",
-    srcset: [
+  banner: image(
+    "assets/images/banner-veterinaria-1200.webp",
+    1200,
+    1600,
+    "Cachorro atendido en Centro Veterinario Zaragoza",
+    [
       { src: "assets/images/banner-veterinaria-720.webp", width: 720 },
       { src: "assets/images/banner-veterinaria-1200.webp", width: 1200 }
-    ],
-    width: 1200,
-    height: 1600,
-    alt: "Cachorro en Centro Veterinario Zaragoza"
-  },
-  surgery: {
-    src: "assets/images/cirugia-veterinaria-1200.webp",
-    srcset: [
+    ]
+  ),
+  surgery: image(
+    "assets/images/cirugia-veterinaria-1200.webp",
+    1200,
+    1600,
+    "Equipo veterinario durante un procedimiento quirúrgico",
+    [
       { src: "assets/images/cirugia-veterinaria-720.webp", width: 720 },
       { src: "assets/images/cirugia-veterinaria-1200.webp", width: 1200 }
+    ]
+  ),
+  team: image(
+    "assets/images/nosotras-equipo-1200.webp",
+    1200,
+    1200,
+    "MVZ. Jimena Núñez Pacheco y MVZ. Paulina E. Ortiz Rivera en Centro Veterinario Zaragoza",
+    [
+      { src: "assets/images/nosotras-equipo-720.webp", width: 720 },
+      { src: "assets/images/nosotras-equipo-1200.webp", width: 1200 }
+    ]
+  ),
+  xrayGeneralNew: image(
+    "assets/images/rayos-x-general-nuevo-1200.webp",
+    1200,
+    824,
+    "Estudio radiográfico general veterinario en proyección lateral",
+    [
+      { src: "assets/images/rayos-x-general-nuevo-720.webp", width: 720 },
+      { src: "assets/images/rayos-x-general-nuevo-1200.webp", width: 1200 }
+    ]
+  ),
+  xrayDental: image(
+    "assets/images/rayos-x-dental-900.webp",
+    900,
+    765,
+    "Estudio radiográfico dental veterinario",
+    [
+      { src: "assets/images/rayos-x-dental-600.webp", width: 600 },
+      { src: "assets/images/rayos-x-dental-900.webp", width: 900 }
+    ]
+  ),
+  paulina: image(
+    "assets/images/mvz-paulina-1200.webp",
+    1200,
+    1041,
+    "MVZ. Paulina E. Ortiz Rivera sosteniendo a un paciente canino",
+    [
+      { src: "assets/images/mvz-paulina-800.webp", width: 800 },
+      { src: "assets/images/mvz-paulina-1200.webp", width: 1200 }
     ],
-    width: 1200,
-    height: 1600,
-    alt: "Equipo veterinario durante un procedimiento quirúrgico"
-  },
-  jimena: {
-    src: "assets/images/mvz-jimena-nunez-900.webp",
-    srcset: [
+    {
+      avatar: image("assets/images/mvz-paulina-avatar.webp", 400, 400, "")
+    }
+  ),
+  jimena: image(
+    "assets/images/mvz-jimena-nunez-900.webp",
+    900,
+    1200,
+    "MVZ. Jimena Núñez Pacheco sosteniendo a una paciente canina",
+    [
       { src: "assets/images/mvz-jimena-nunez-480.webp", width: 480 },
       { src: "assets/images/mvz-jimena-nunez-900.webp", width: 900 }
     ],
-    width: 900,
-    height: 1200,
-    alt: "Médica veterinaria sosteniendo a una paciente canina",
-    avatar: {
-      src: "assets/images/mvz-jimena-nunez-avatar.webp",
-      width: 400,
-      height: 400,
-      alt: ""
+    {
+      avatar: image("assets/images/mvz-jimena-nunez-avatar.webp", 400, 400, "")
     }
-  },
-  team: {
-    src: "assets/images/nosotras-equipo-1200.webp",
-    srcset: [
-      { src: "assets/images/nosotras-equipo-720.webp", width: 720 },
-      { src: "assets/images/nosotras-equipo-1200.webp", width: 1200 }
-    ],
-    width: 1200,
-    height: 988,
-    alt: "MVZ. Jimena Núñez Pacheco y MVZ. Paulina E. Ortiz Rivera con una paciente en Centro Veterinario Zaragoza"
-  },
-  xrayGeneral: {
-    src: "assets/images/radiografia-general-1200.webp",
-    srcset: [
-      { src: "assets/images/radiografia-general-720.webp", width: 720 },
-      { src: "assets/images/radiografia-general-1200.webp", width: 1200 }
-    ],
-    width: 1200,
-    height: 742,
-    alt: "Radiografía veterinaria general de un paciente canino"
-  },
-  xrayDental: {
-    src: "assets/images/radiografia-dental-900.webp",
-    srcset: [
-      { src: "assets/images/radiografia-dental-600.webp", width: 600 },
-      { src: "assets/images/radiografia-dental-900.webp", width: 900 }
-    ],
-    width: 900,
-    height: 795,
-    alt: "Radiografía dental veterinaria"
-  }
+  ),
+  paulinaProcedure: image(
+    "assets/images/paulina-procedimiento-gato-1200.webp",
+    1200,
+    675,
+    "Médica veterinaria con un paciente felino durante un procedimiento",
+    [
+      { src: "assets/images/paulina-procedimiento-gato-800.webp", width: 800 },
+      { src: "assets/images/paulina-procedimiento-gato-1200.webp", width: 1200 }
+    ]
+  ),
+  ultrasoundConsult: image(
+    "assets/images/ultrasonido-consulta-960.webp",
+    960,
+    1280,
+    "Estudio de ultrasonido veterinario durante una consulta",
+    [
+      { src: "assets/images/ultrasonido-consulta-480.webp", width: 480 },
+      { src: "assets/images/ultrasonido-consulta-960.webp", width: 960 }
+    ]
+  ),
+  ultrasoundPatient: image(
+    "assets/images/ultrasonido-diagnostico-900.webp",
+    900,
+    1600,
+    "Paciente canino junto a equipo de ultrasonografía veterinaria",
+    [
+      { src: "assets/images/ultrasonido-diagnostico-480.webp", width: 480 },
+      { src: "assets/images/ultrasonido-diagnostico-900.webp", width: 900 }
+    ]
+  ),
+  laboratory: image(
+    "assets/images/laboratorio-clinico-1200.webp",
+    1200,
+    1587,
+    "Paciente canino durante una evaluación de laboratorio clínico veterinario",
+    [
+      { src: "assets/images/laboratorio-clinico-480.webp", width: 480 },
+      { src: "assets/images/laboratorio-clinico-1200.webp", width: 1200 }
+    ]
+  ),
+  passport: image(
+    "assets/images/pasaporte-animal-1200.webp",
+    1200,
+    684,
+    "Gato acompañado de carnet y documentación veterinaria para viaje",
+    [
+      { src: "assets/images/pasaporte-animal-480.webp", width: 480 },
+      { src: "assets/images/pasaporte-animal-1200.webp", width: 1200 }
+    ]
+  ),
+  xrays: [
+    image(
+      "assets/images/rayos-x-torax-ap-830.webp",
+      830,
+      1600,
+      "Estudio radiográfico veterinario en proyección frontal",
+      [
+        { src: "assets/images/rayos-x-torax-ap-480.webp", width: 480 },
+        { src: "assets/images/rayos-x-torax-ap-830.webp", width: 830 }
+      ]
+    ),
+    image(
+      "assets/images/rayos-x-torax-lateral-1200.webp",
+      1200,
+      762,
+      "Estudio radiográfico veterinario en proyección lateral",
+      [
+        { src: "assets/images/rayos-x-torax-lateral-480.webp", width: 480 },
+        { src: "assets/images/rayos-x-torax-lateral-1200.webp", width: 1200 }
+      ]
+    ),
+    image(
+      "assets/images/rayos-x-cadera-1200.webp",
+      1200,
+      1330,
+      "Estudio radiográfico veterinario de pelvis y extremidades posteriores",
+      [
+        { src: "assets/images/rayos-x-cadera-480.webp", width: 480 },
+        { src: "assets/images/rayos-x-cadera-1200.webp", width: 1200 }
+      ]
+    )
+  ],
+  grooming: [
+    image(
+      "assets/images/spa-poodle-rosa-1200.webp",
+      1200,
+      1253,
+      "Poodle después de un servicio de grooming con orejas en color rosa",
+      [
+        { src: "assets/images/spa-poodle-rosa-480.webp", width: 480 },
+        { src: "assets/images/spa-poodle-rosa-1200.webp", width: 1200 }
+      ]
+    ),
+    image(
+      "assets/images/spa-antes-despues-blanco-1200.webp",
+      1200,
+      1161,
+      "Antes y después de un servicio de grooming en un perro de pelo blanco",
+      [
+        { src: "assets/images/spa-antes-despues-blanco-480.webp", width: 480 },
+        { src: "assets/images/spa-antes-despues-blanco-1200.webp", width: 1200 }
+      ]
+    ),
+    image(
+      "assets/images/spa-antes-despues-gris-1200.webp",
+      1200,
+      1150,
+      "Antes y después de un servicio de grooming en un perro de pelo gris",
+      [
+        { src: "assets/images/spa-antes-despues-gris-480.webp", width: 480 },
+        { src: "assets/images/spa-antes-despues-gris-1200.webp", width: 1200 }
+      ]
+    ),
+    image(
+      "assets/images/spa-pomerania-antes-despues-1200.webp",
+      1200,
+      1058,
+      "Antes y después de un servicio de grooming en un perro Pomerania",
+      [
+        { src: "assets/images/spa-pomerania-antes-despues-480.webp", width: 480 },
+        { src: "assets/images/spa-pomerania-antes-despues-1200.webp", width: 1200 }
+      ]
+    )
+  ]
 };
 
 export const business = {
@@ -75,12 +218,13 @@ export const business = {
   description:
     "Dedicados y comprometidos con la salud de tu mascota. Previene, cuida y protege a quienes más amas.",
   shortDescription:
-    "Atención veterinaria, diagnóstico, cirugía, grooming y apoyo documental para viaje en Venustiano Carranza, CDMX.",
+    "Atención veterinaria, diagnóstico, cirugía, farmacia, grooming y apoyo para viajes en Venustiano Carranza, CDMX.",
   owners: [
     {
       name: "MVZ. Paulina E. Ortiz Rivera",
       initials: "PO",
-      role: "Médica Veterinaria Zootecnista"
+      role: "Médica Veterinaria Zootecnista",
+      photo: media.paulina
     },
     {
       name: "MVZ. Jimena Núñez Pacheco",
@@ -105,7 +249,7 @@ export const business = {
     },
     {
       title: "Servicios integrales",
-      text: "Salud, diagnóstico, belleza, cuidado y apoyo para viajes en un mismo centro."
+      text: "Salud, diagnóstico, farmacia, belleza y apoyo para viajes en un mismo centro."
     }
   ],
   contact: {
@@ -114,7 +258,7 @@ export const business = {
     whatsappNumber: "525568157821",
     email: "",
     instagram: "https://www.instagram.com/centro_veterinario_zaragoza/",
-    addressLine: "Calle 33 #161",
+    addressLine: "C. 33 161",
     neighborhood: "Ignacio Zaragoza",
     borough: "Venustiano Carranza",
     city: "Ciudad de México",
@@ -122,9 +266,12 @@ export const business = {
     postalCode: "15000",
     countryCode: "MX",
     fullAddress:
-      "Calle 33 #161, Ignacio Zaragoza, Venustiano Carranza, 15000, Ciudad de México, CDMX",
+      "C. 33 161, Ignacio Zaragoza, Venustiano Carranza, C.P. 15000, Ciudad de México, CDMX",
+    mapSharedUrl: "https://share.google/nFRBrkXE8wR9b98kZ",
     mapDirectionsUrl:
       "https://www.google.com/maps/dir/?api=1&destination=C.%2033%20161%2C%20Ignacio%20Zaragoza%2C%20Venustiano%20Carranza%2C%2015000%20Ciudad%20de%20M%C3%A9xico%2C%20CDMX",
+    mapSearchUrl:
+      "https://www.google.com/maps/search/?api=1&query=Centro%20Veterinario%20Zaragoza%2C%20C.%2033%20161%2C%20Ignacio%20Zaragoza%2C%20Venustiano%20Carranza%2C%2015000%20Ciudad%20de%20M%C3%A9xico%2C%20CDMX",
     mapEmbedUrl:
       "https://maps.google.com/maps?output=embed&q=Centro+Veterinario+Zaragoza%2C+C.+33+161%2C+Ignacio+Zaragoza%2C+Venustiano+Carranza%2C+15000+Ciudad+de+M%C3%A9xico%2C+CDMX&z=17"
   },
@@ -153,16 +300,25 @@ export const business = {
         icon: "stethoscope"
       },
       {
+        id: "especialidades",
+        title: "Especialidades",
+        short: "Atención especializada según disponibilidad y agenda previa coordinada por WhatsApp.",
+        icon: "stethoscope",
+        image: media.ultrasoundConsult
+      },
+      {
         id: "ultrasonografia",
         title: "Ultrasonografía",
         short: "Estudio de imagen disponible con cita para apoyar la valoración clínica.",
-        icon: "ultrasound"
+        icon: "ultrasound",
+        image: media.ultrasoundPatient
       },
       {
         id: "laboratorio-clinico",
         title: "Laboratorio clínico",
-        short: "Apoyo diagnóstico mediante estudios de laboratorio.",
-        icon: "lab"
+        short: "Apoyo diagnóstico mediante estudios de laboratorio indicados en consulta.",
+        icon: "lab",
+        image: media.laboratory
       },
       {
         id: "radiografias",
@@ -178,22 +334,23 @@ export const business = {
         image: media.surgery
       },
       {
-        id: "especialidades",
-        title: "Especialidades",
-        short: "Consulta disponibilidad de atención especializada por WhatsApp.",
-        icon: "specialty"
+        id: "farmacia-veterinaria",
+        title: "Farmacia veterinaria",
+        short: "Solicita tu pedido, comparte tu receta veterinaria y recibe una cotización por WhatsApp.",
+        icon: "pharmacy"
+      },
+      {
+        id: "microchip-viajes",
+        title: "Microchip y documentación de viaje",
+        short: "Aplicación de microchip sin cita, lectura, carnet o pasaporte veterinario y orientación documental.",
+        icon: "travel",
+        image: media.passport
       },
       {
         id: "servicios-funerarios",
         title: "Servicios funerarios",
         short: "Acompañamiento y orientación para despedir a tu mascota con respeto.",
         icon: "heart"
-      },
-      {
-        id: "cartas-chips-viaje",
-        title: "Cartas y chips para viaje",
-        short: "Apoyo para viajes nacionales e internacionales. Consulta requisitos y agenda.",
-        icon: "travel"
       }
     ],
     grooming: [
@@ -237,16 +394,22 @@ export const business = {
       note: "Precio informado por el centro"
     },
     {
-      service: "Ultrasonografía abdominal general",
-      price: "$900",
+      service: "Ultrasonografía general y especialidad",
+      price: "$1,500",
       currency: "MXN",
       note: "Agenda previa"
     },
     {
-      service: "Estudios radiográficos",
-      price: "$900",
+      service: "Estudios radiográficos generales",
+      price: "$950",
       currency: "MXN",
-      note: "Incluye 2 tomas"
+      note: "Confirma preparación y proyecciones requeridas"
+    },
+    {
+      service: "Rayos X dentales",
+      price: "Cotización individual",
+      currency: "",
+      note: "El costo varía por raza, talla, peso, patología dental y protocolo anestésico"
     },
     {
       service: "Evaluación y cotización prequirúrgica",
@@ -255,6 +418,42 @@ export const business = {
       note: "Con cita previa"
     }
   ],
+  travel: {
+    title: "Identificación segura para viajar a tu lado",
+    services: [
+      {
+        title: "Aplicación de microchip sin previa cita",
+        text: "Identificación individual mediante microchip. Puedes acudir dentro del horario de clínica; conviene confirmar disponibilidad por WhatsApp antes de trasladarte.",
+        icon: "chip"
+      },
+      {
+        title: "Lectura compatible con ISO 11784/11785",
+        text: "Comprobamos el número del microchip con lector compatible y te orientamos sobre el registro de la identificación.",
+        icon: "scanner"
+      },
+      {
+        title: "Carnet o pasaporte veterinario",
+        text: "Entrega y actualización de documentación clínica para concentrar identificación, vacunación y datos relevantes del paciente.",
+        icon: "passport"
+      },
+      {
+        title: "Cartas nacionales e internacionales",
+        text: "Preparamos la documentación clínica que corresponda y revisamos contigo los requisitos informados por el destino o transportista.",
+        icon: "document"
+      }
+    ],
+    disclaimer:
+      "El microchip, el carnet o pasaporte veterinario y las cartas clínicas no sustituyen certificados zoosanitarios, permisos ni requisitos oficiales. Las condiciones cambian según destino, autoridad y medio de transporte; deben confirmarse antes de viajar."
+  },
+  pharmacy: {
+    title: "Farmacia veterinaria",
+    text: "Solicita tu pedido por WhatsApp. Comparte una fotografía legible de tu receta veterinaria y te enviamos disponibilidad y cotización.",
+    notes: [
+      "Surtido sujeto a existencia.",
+      "Los medicamentos que requieren receta se entregan únicamente con indicación veterinaria válida.",
+      "La cotización no sustituye una consulta ni una prescripción."
+    ]
+  },
   faq: [
     {
       question: "¿Cuál es el costo de la consulta general?",
@@ -266,17 +465,38 @@ export const business = {
         "La evaluación y cotización prequirúrgica se ofrece sin costo y requiere cita previa."
     },
     {
+      question: "¿Las especialidades requieren cita?",
+      answer:
+        "Sí. La disponibilidad de las especialidades se coordina previamente por WhatsApp."
+    },
+    {
+      question: "¿Necesito cita para la aplicación de microchip?",
+      answer:
+        "La aplicación de microchip se ofrece sin previa cita dentro del horario de clínica. Recomendamos confirmar disponibilidad por WhatsApp antes de acudir."
+    },
+    {
+      question: "¿El pasaporte veterinario garantiza el ingreso a cualquier país?",
+      answer:
+        "No. Cada destino, autoridad y transportista puede solicitar requisitos adicionales. El centro brinda documentación clínica y orientación, pero deben confirmarse las condiciones oficiales antes de viajar."
+    },
+    {
+      question: "¿Cómo solicito un producto de farmacia?",
+      answer:
+        "Escríbenos por WhatsApp, indica el producto y comparte tu receta veterinaria cuando corresponda. Te enviaremos disponibilidad y cotización."
+    },
+    {
       question: "¿Qué horario tiene la clínica?",
       answer: "La clínica atiende de lunes a sábado, de 10:00 a 18:00 horas."
     },
     {
-      question: "¿Qué horario tiene grooming?",
-      answer: "Grooming atiende de lunes a domingo, de 11:00 a 17:00 horas."
+      question: "¿Qué horario tiene Grooming?",
+      answer:
+        "Grooming atiende de lunes a domingo, de 11:00 a 17:00 horas."
     },
     {
       question: "¿Dónde se encuentra Centro Veterinario Zaragoza?",
       answer:
-        "En Calle 33 #161, colonia Ignacio Zaragoza, alcaldía Venustiano Carranza, C.P. 15000, Ciudad de México."
+        "En C. 33 161, colonia Ignacio Zaragoza, alcaldía Venustiano Carranza, C.P. 15000, Ciudad de México."
     },
     {
       question: "¿Cómo puedo solicitar una cita?",
@@ -290,18 +510,22 @@ export const navigation = [
   { label: "Inicio", href: "" },
   { label: "Servicios", href: "servicios/" },
   { label: "Grooming", href: "estetica/" },
+  { label: "Viajes", href: "microchip-y-viajes/" },
   { label: "Nosotras", href: "nosotros/" },
   { label: "Contacto", href: "contacto/" }
 ];
 
 export const serviceOptions = [
   "Consulta general",
+  "Especialidades",
   "Ultrasonografía",
   "Laboratorio clínico",
-  "Rayos X generales y dentales",
+  "Estudios radiográficos generales",
+  "Rayos X dentales",
   "Cirugía / evaluación prequirúrgica",
-  "Especialidad",
-  "Cartas o chip para viaje",
+  "Aplicación o lectura de microchip",
+  "Carnet, pasaporte o carta para viaje",
+  "Farmacia veterinaria / cotización",
   "Servicios funerarios",
   "Baño",
   "Deslanado",

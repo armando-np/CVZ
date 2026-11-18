@@ -1,23 +1,15 @@
 # Centro Veterinario Zaragoza — sitio web
 
-Sitio estático, responsivo y escalable para **Centro Veterinario Zaragoza**. Está preparado para publicarse en GitHub Pages sin frameworks ni dependencias de producción.
+Continuidad del sitio estático del repositorio `armando-np/CVZ`, actualizada con fotografías reales y nuevos apartados para cardiología, diagnóstico por imagen, laboratorio clínico, microchip y documentación de viaje, farmacia veterinaria y estética animal.
 
-## Incluye
+## Datos oficiales integrados
 
-- Página de inicio orientada a conversión.
-- Páginas de servicios veterinarios, estética canina, equipo, contacto y privacidad.
-- Formulario de solicitud de cita que prepara un mensaje y abre WhatsApp; no almacena datos en un servidor.
-- Botones de llamada, WhatsApp, Instagram y cómo llegar.
-- Mapa, horarios, precios de referencia y preguntas frecuentes.
-- SEO técnico: títulos y descripciones por página, URL canónica, Open Graph, Twitter Cards, datos estructurados `VeterinaryCare`, migas de pan, FAQ, `sitemap.xml` y `robots.txt`.
-- Google Analytics 4 configurado con la propiedad `G-T5QGNG2G1R`, cargado únicamente después del consentimiento.
-- Eventos de medición para clics de contacto y solicitudes de cita, sin enviar nombres de personas ni mascotas.
-- Diseño accesible, adaptable a móvil y escritorio, con soporte para reducción de movimiento.
-- Publicación automática mediante GitHub Actions.
+- **Dirección:** C. 33 161, Ignacio Zaragoza, Venustiano Carranza, C.P. 15000, Ciudad de México, CDMX.
+- **Teléfono y WhatsApp:** 55 6815 7821.
+- **Google Analytics 4:** `G-T5QGNG2G1R`, sujeto a consentimiento.
+- **Mapa:** botón de indicaciones y mapa incrustado generado con la dirección oficial.
 
-## Inicio rápido local
-
-Requiere Node.js 20 o superior; el flujo de GitHub utiliza Node.js 22.
+## Comandos
 
 ```bash
 npm run build
@@ -25,60 +17,24 @@ npm run check
 npm run serve
 ```
 
-Después abre:
+Abre `http://127.0.0.1:4173/` después de ejecutar `npm run serve`.
 
-```text
-http://127.0.0.1:4173/
-```
+## Publicación
 
-No es necesario instalar paquetes: el generador usa únicamente módulos incluidos en Node.js.
+El flujo `.github/workflows/pages.yml` compila y publica automáticamente al enviar cambios a `main`. En **Settings → Pages**, selecciona **GitHub Actions** como fuente.
 
-## Publicación en GitHub Pages
+El generador detecta una publicación en la raíz o bajo una ruta de proyecto como `/CVZ/`.
 
-Consulta [CONFIGURACION.md](CONFIGURACION.md) para el procedimiento completo.
+## Estructura
 
-Resumen:
+- `src/data/business.mjs`: datos oficiales, servicios, horarios y medios.
+- `src/pages/`: contenido de las páginas.
+- `src/templates/`: componentes y metadatos compartidos.
+- `public/assets/`: CSS, JavaScript e imágenes.
+- `scripts/`: construcción, comprobación y servidor local.
 
-1. Crea un repositorio nuevo en GitHub.
-2. Sube **todo el contenido de esta carpeta**, incluida la carpeta oculta `.github`.
-3. Usa `main` como rama principal.
-4. En GitHub abre **Settings → Pages** y selecciona **GitHub Actions** como fuente.
-5. El flujo `.github/workflows/pages.yml` construirá, verificará y publicará el sitio.
+## Privacidad y viajes
 
-El generador detecta automáticamente si GitHub Pages publicará en la raíz o dentro de una ruta como `/nombre-del-repositorio/`.
+El formulario no envía información a un servidor; prepara un mensaje y abre WhatsApp. Google Analytics solo se carga tras la aceptación de analítica.
 
-## Dónde editar
-
-| Necesidad | Archivo o carpeta |
-|---|---|
-| Datos, servicios, horarios, precios y FAQ | `src/data/business.mjs` |
-| Contenido de cada página | `src/pages/` |
-| Componentes compartidos | `src/templates/` |
-| Colores y diseño | `public/assets/css/styles.css` |
-| Logo, ilustraciones y fotografías optimizadas | `public/assets/images/` |
-| Analítica y eventos | `public/assets/js/analytics.js` y `public/assets/js/main.js` |
-| Configuración local | `site.config.json` |
-| Publicación | `.github/workflows/pages.yml` |
-
-## Variables de configuración
-
-Estas variables pueden configurarse en **Settings → Secrets and variables → Actions → Variables**:
-
-| Variable | Uso | Ejemplo |
-|---|---|---|
-| `SITE_URL` | Dominio final, especialmente si se usa dominio propio | `https://www.ejemplo.com/` |
-| `GA4_MEASUREMENT_ID` | Identificador de Google Analytics 4; reemplaza el valor local si se define | `G-T5QGNG2G1R` |
-| `GOOGLE_SITE_VERIFICATION` | Valor de verificación de Search Console | Solo el código de verificación |
-| `BING_SITE_VERIFICATION` | Valor de verificación de Bing Webmaster Tools | Solo el código de verificación |
-
-La medición `G-T5QGNG2G1R` ya está guardada en `site.config.json`, por lo que no es obligatorio crear la variable en GitHub. Si se define `GA4_MEASUREMENT_ID`, su valor reemplaza la configuración local. Analytics solo se carga después de que la persona visitante acepta la analítica.
-
-## Decisiones de contenido
-
-El sitio no inventa reseñas, testimonios, correo electrónico, redes sociales ni disponibilidad 24 horas. Las tres fotografías entregadas se integraron como banner principal, imagen de cirugía y fotografía del perfil de Jimena; el resto de los recursos visuales conserva ilustraciones originales de estilo clínico.
-
-Revisa [CONTENIDO-PENDIENTE.md](CONTENIDO-PENDIENTE.md) antes de publicar la versión definitiva.
-
-## Aviso importante sobre privacidad
-
-La página de privacidad incluida es un borrador funcional que describe el comportamiento técnico actual del formulario, WhatsApp, Google Maps y Analytics. No constituye una certificación de cumplimiento ni sustituye una revisión jurídica. Antes de la publicación definitiva conviene validar el texto, el responsable, los medios de contacto y cualquier tratamiento adicional de datos.
+La referencia a ISO 11784/11785 corresponde al microchip de identificación y su lectura. El carnet o pasaporte veterinario, las cartas clínicas y el microchip no sustituyen certificados zoosanitarios ni requisitos de autoridades, aerolíneas o destinos. Es necesario confirmar los requisitos vigentes antes de viajar.
