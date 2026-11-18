@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img" aria-labelledby="t d">
+<title id="t">Mascota preparada para viajar</title><desc id="d">Ilustración de una mascota, un microchip y un pasaporte veterinario.</desc>
+<rect width="760" height="560" rx="44" fill="#eaf7fd"/>
+<circle cx="220" cy="276" r="142" fill="#fff" stroke="#80d2f0" stroke-width="12"/>
+<path d="M148 240c18-60 126-60 144 0v96c0 52-144 52-144 0z" fill="#249ddd"/>
+<path d="M160 220l-54-55 12 100m162-45 54-55-12 100" fill="#249ddd" stroke="#1858b8" stroke-width="12" stroke-linejoin="round"/>
+<circle cx="187" cy="276" r="10" fill="#0b2445"/><circle cx="253" cy="276" r="10" fill="#0b2445"/>
+<path d="M205 304c10 15 20 15 30 0" fill="none" stroke="#0b2445" stroke-width="9" stroke-linecap="round"/>
+<rect x="420" y="128" width="236" height="304" rx="20" fill="#1858b8"/>
+<path d="M472 190h132M472 230h100M472 330h132M472 370h92" stroke="#fff" stroke-width="14" stroke-linecap="round" opacity=".9"/>
+<circle cx="538" cy="280" r="36" fill="#31b7e8" stroke="#fff" stroke-width="8"/>
+<rect x="360" y="82" width="112" height="52" rx="16" fill="#fff" stroke="#249ddd" stroke-width="8"/>
+<path d="M383 108h66" stroke="#1858b8" stroke-width="10" stroke-linecap="round"/>
+</svg>
