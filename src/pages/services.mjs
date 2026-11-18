@@ -172,11 +172,6 @@ export function render(ctx) {
             <div class="diagnostic-feature__media">${responsiveImage({ ctx, image: business.media.xrayDental, sizes: "(max-width: 760px) calc(100vw - 28px), 420px" })}</div>
           </article>
         </div>
-        <div class="media-gallery media-gallery--xrays">
-          ${mediaFigure(ctx, business.media.xrays[0], "Proyección radiográfica frontal", "media-card--tall")}
-          ${mediaFigure(ctx, business.media.xrays[1], "Proyección radiográfica lateral", "media-card--wide")}
-          ${mediaFigure(ctx, business.media.xrays[2], "Estudio radiográfico de pelvis", "media-card--tall")}
-        </div>
         <p class="media-disclaimer">Las imágenes muestran el servicio de radiografía y no incluyen interpretación clínica ni diagnóstico.</p>
         <div class="section-actions">
           ${whatsappLink(

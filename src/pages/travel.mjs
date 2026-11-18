@@ -17,7 +17,7 @@ export function render(ctx) {
     eyebrow: "Microchip y viajes",
     title: "Identificación segura para que tu mascota viaje a tu lado",
     text: "Aplicación de microchip sin previa cita, lectura compatible con ISO 11784/11785, carnet o pasaporte veterinario y orientación para documentación nacional e internacional.",
-    image: business.media.passport,
+    image: business.media.travelKit,
     imageAlt: "Mascota con carnet y documentación veterinaria para viaje",
     actions: [
       whatsappLink(
@@ -94,7 +94,7 @@ export function render(ctx) {
         </div>
       </div>
       <div class="travel-illustration reveal reveal--delay">
-        <img src="${ctx.asset("assets/images/travel-pet.svg")}" width="760" height="560" alt="Ilustración de mascota, microchip y pasaporte veterinario" loading="lazy" decoding="async">
+        ${responsiveImage({ ctx, image: business.media.travelKit, sizes: "(max-width: 760px) calc(100vw - 28px), 520px" })}
       </div>
     </div>
   </section>
@@ -127,7 +127,7 @@ export function render(ctx) {
         <figure class="media-card media-card--feature">
           ${responsiveImage({
             ctx,
-            image: business.media.passport,
+            image: business.media.travelKit,
             sizes: "(max-width: 960px) calc(100vw - 40px), 540px"
           })}
           <figcaption>Carnet y documentación veterinaria vinculados con la identificación de la mascota.</figcaption>

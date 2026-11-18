@@ -18,6 +18,26 @@ const media = {
       { src: "assets/images/banner-veterinaria-1200.webp", width: 1200 }
     ]
   ),
+  consultation: image(
+    "assets/images/consulta-general-gato-960.webp",
+    960,
+    1280,
+    "Paciente felino durante una consulta médica general en Centro Veterinario Zaragoza",
+    [
+      { src: "assets/images/consulta-general-gato-600.webp", width: 600 },
+      { src: "assets/images/consulta-general-gato-960.webp", width: 1200 }
+    ]
+  ),
+  travelKit: image(
+    "assets/images/chip-viaje-1200.webp",
+    1200,
+    926,
+    "Kit de microchip, lector y pasaporte para mascotas",
+    [
+      { src: "assets/images/chip-viaje-600.webp", width: 600 },
+      { src: "assets/images/chip-viaje-1200.webp", width: 1200 }
+    ]
+  ),
   surgery: image(
     "assets/images/cirugia-veterinaria-1200.webp",
     1200,
@@ -344,7 +364,7 @@ export const business = {
         title: "Microchip y documentación de viaje",
         short: "Aplicación de microchip sin cita, lectura, carnet o pasaporte veterinario y orientación documental.",
         icon: "travel",
-        image: media.passport
+        image: media.travelKit
       },
       {
         id: "servicios-funerarios",

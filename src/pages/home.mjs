@@ -15,14 +15,14 @@ import { icon } from "../templates/icons.mjs";
 
 export function render(ctx) {
   const featuredServices = [
-    { id: "consulta-general", title: "Consulta", short: "Valoración médica general y orientación para el cuidado de tu mascota.", icon: "stethoscope" },
+    { id: "consulta-general", title: "Consulta", short: "Valoración médica general y orientación para el cuidado de tu mascota.", icon: "stethoscope", image: business.media.consultation },
     { id: "especialidades", title: "Cardiología (previa cita)", short: "Atención cardiológica disponible con coordinación y cita previa por WhatsApp.", icon: "cardiology" },
     { id: "diagnostico", title: "Imagen", short: "Ultrasonografía y rayos X generales y dentales como apoyo diagnóstico.", icon: "xray" },
     { id: "laboratorio-clinico", title: "Laboratorio", short: "Estudios de laboratorio clínico indicados según la valoración veterinaria.", icon: "lab" },
     { id: "cirugia", title: "Cirugía", short: "Valoración y planeación prequirúrgica con cita previa.", icon: "surgery", image: business.media.surgery },
     { id: "farmacia-veterinaria", title: "Farmacia", short: "Disponibilidad y cotización de productos veterinarios por WhatsApp.", icon: "pharmacy" },
     { id: "grooming", title: "Grooming", short: "Baño, deslanado, uñas, estilismo y colorimetría de lunes a domingo.", icon: "scissors" },
-    { id: "microchip-viajes", title: "Apoyo documental para viaje", short: "Microchip, carnet o pasaporte y orientación documental para viajes.", icon: "travel", image: business.media.passport }
+    { id: "microchip-viajes", title: "Apoyo documental para viaje", short: "Microchip, carnet o pasaporte y orientación documental para viajes.", icon: "travel", image: business.media.travelKit }
   ];
   const homeFaq = business.faq.filter((_, index) => [0, 2, 3, 5, 6, 8].includes(index));
 
@@ -163,7 +163,7 @@ export function render(ctx) {
       <div class="travel-photo reveal">
         ${responsiveImage({
           ctx,
-          image: business.media.passport,
+          image: business.media.travelKit,
           sizes: "(max-width: 960px) calc(100vw - 40px), 520px"
         })}
       </div>
