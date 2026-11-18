@@ -1,25 +1,48 @@
 import { business } from "../data/business.mjs";
-import { consentBanner, escapeHtml, floatingActions, footer, header } from "./components.mjs";
+import { consentBanner, floatingActions, footer, header } from "./components.mjs";
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
 
 function safeJson(value) {
   return JSON.stringify(value).replaceAll("<", "\\u003c");
 }
 
-const dayMap = {
-  Lunes: "Monday",
-  Martes: "Tuesday",
-  Miércoles: "Wednesday",
-  Jueves: "Thursday",
-  Viernes: "Friday",
-  Sábado: "Saturday",
-  Domingo: "Sunday"
-};
-
-function schemaDays(days) {
-  return days.map((day) => `https://schema.org/${dayMap[day]}`);
+function dayUrl(day) {
+  return `https://schema.org/${day}`;
 }
 
 function localBusinessSchema(ctx) {
+  const clinicDays = business.hours.clinic.days.map((day) => {
+    const map = {
+      Lunes: "Monday",
+      Martes: "Tuesday",
+      Miércoles: "Wednesday",
+      Jueves: "Thursday",
+      Viernes: "Friday",
+      Sábado: "Saturday",
+      Domingo: "Sunday"
+    };
+    return dayUrl(map[day]);
+  });
+  const groomingDays = business.hours.grooming.days.map((day) => {
+    const map = {
+      Lunes: "Monday",
+      Martes: "Tuesday",
+      Miércoles: "Wednesday",
+      Jueves: "Thursday",
+      Viernes: "Friday",
+      Sábado: "Saturday",
+      Domingo: "Sunday"
+    };
+    return dayUrl(map[day]);
+  });
+
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -31,14 +54,9 @@ function localBusinessSchema(ctx) {
         description: business.shortDescription,
         url: ctx.siteUrl,
         logo: ctx.absoluteAsset("assets/images/logo.png"),
-        image: [
-          ctx.absoluteAsset("assets/images/og-default.png"),
-          ctx.absoluteAsset(business.media.paulina.src),
-          ctx.absoluteAsset(business.media.banner.src)
-        ],
+        image: ctx.absoluteAsset("assets/images/og-default.png"),
         telephone: business.contact.phoneE164,
         slogan: business.slogan,
-        hasMap: business.contact.mapSearchUrl,
         address: {
           "@type": "PostalAddress",
           streetAddress: business.contact.addressLine,
@@ -54,19 +72,19 @@ function localBusinessSchema(ctx) {
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
-            dayOfWeek: schemaDays(business.hours.clinic.days),
+            dayOfWeek: clinicDays,
             opens: business.hours.clinic.opens,
             closes: business.hours.clinic.closes
           }
         ],
         department: {
           "@type": "LocalBusiness",
-          name: `Estética animal — ${business.name}`,
+          name: `Grooming — ${business.name}`,
           telephone: business.contact.phoneE164,
           openingHoursSpecification: [
             {
               "@type": "OpeningHoursSpecification",
-              dayOfWeek: schemaDays(business.hours.grooming.days),
+              dayOfWeek: groomingDays,
               opens: business.hours.grooming.opens,
               closes: business.hours.grooming.closes
             }
@@ -75,7 +93,7 @@ function localBusinessSchema(ctx) {
         sameAs: [business.contact.instagram],
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Servicios veterinarios y de estética",
+          name: "Servicios veterinarios y grooming",
           itemListElement: [
             ...business.services.medical.map((service) => ({
               "@type": "Offer",
@@ -159,9 +177,6 @@ export function layout({
     businessName: business.name,
     locale: "es-MX"
   };
-  const imageType = image.endsWith(".webp") ? "image/webp" : "image/png";
-  const assetVersion = "1.1.2";
-  const versionedAsset = (assetPath) => `${ctx.asset(assetPath)}?v=${assetVersion}`;
 
   return `<!doctype html>
 <html lang="es-MX">
@@ -188,7 +203,7 @@ export function layout({
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${ctx.absoluteAsset(image)}">
-  <meta property="og:image:type" content="${imageType}">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">
@@ -199,12 +214,12 @@ export function layout({
   <meta name="twitter:image:alt" content="${escapeHtml(imageAlt)}">
   ${ctx.googleSiteVerification ? `<meta name="google-site-verification" content="${escapeHtml(ctx.googleSiteVerification)}">` : ""}
   ${ctx.bingSiteVerification ? `<meta name="msvalidate.01" content="${escapeHtml(ctx.bingSiteVerification)}">` : ""}
-  <link rel="stylesheet" href="${versionedAsset("assets/css/styles.css")}">
+  <link rel="stylesheet" href="${ctx.asset("assets/css/styles.css")}">
   ${schemas.map((schema) => `<script type="application/ld+json">${safeJson(schema)}</script>`).join("\n  ")}
   <script id="site-config" type="application/json">${safeJson(config)}</script>
-  <script src="${versionedAsset("assets/js/analytics.js")}" defer></script>
-  <script src="${versionedAsset("assets/js/main.js")}" defer></script>
-  ${scripts.map((script) => `<script src="${versionedAsset(script)}" defer></script>`).join("\n  ")}
+  <script src="${ctx.asset("assets/js/analytics.js")}" defer></script>
+  <script src="${ctx.asset("assets/js/main.js")}" defer></script>
+  ${scripts.map((script) => `<script src="${ctx.asset(script)}" defer></script>`).join("\n  ")}
 </head>
 <body class="${bodyClass}">
   ${header(ctx, activePath)}
