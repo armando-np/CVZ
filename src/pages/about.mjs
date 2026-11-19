@@ -76,36 +76,6 @@ export function render(ctx) {
     </div>
   </section>
 
-  <section class="section section--soft" aria-labelledby="paulina-title">
-    <div class="container content-split">
-      <div class="content-split__media reveal">
-        ${mediaFigure(ctx, business.media.paulina, "MVZ. Paulina E. Ortiz Rivera con un paciente")}
-      </div>
-      <div class="content-split__copy reveal reveal--delay">
-        ${sectionHeading({
-          eyebrow: "Atención cercana",
-          title: "MVZ. Paulina E. Ortiz Rivera",
-          text: "Parte del equipo médico de Centro Veterinario Zaragoza, con participación en la atención cotidiana de pacientes y en la orientación a sus familias.",
-          id: "paulina-title"
-        })}
-        <div class="feature-list">
-          <div>${icon("stethoscope")}<span><strong>Valoración veterinaria</strong>Atención clínica de acuerdo con el motivo de consulta.</span></div>
-          <div>${icon("heart")}<span><strong>Trato empático</strong>Manejo cuidadoso y comunicación directa.</span></div>
-          <div>${icon("document")}<span><strong>Orientación</strong>Indicaciones y seguimiento explicados de forma clara.</span></div>
-        </div>
-        <div class="button-row">
-          ${whatsappLink(
-            ctx,
-            "Hola, Centro Veterinario Zaragoza. Quiero solicitar una cita veterinaria.",
-            "Solicitar cita",
-            "primary",
-            "whatsapp_paulina_about"
-          )}
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="section" aria-labelledby="forma-trabajo-title">
     <div class="container story-layout">
       <div class="story-layout__content reveal">
@@ -178,7 +148,7 @@ export function render(ctx) {
   return {
     title: "Nosotras | Equipo veterinario",
     description:
-      "Conoce a la MVZ. Paulina E. Ortiz Rivera y a la MVZ. Jimena Núñez Pacheco, equipo de Centro Veterinario Zaragoza en Venustiano Carranza, CDMX.",
+      "Conoce a la MVZ. Jimena Núñez Pacheco y a la MVZ. Paulina E. Ortiz Rivera, equipo de Centro Veterinario Zaragoza en Venustiano Carranza, CDMX.",
     content,
     activePath: "nosotros/",
     canonicalPath: "nosotros/",

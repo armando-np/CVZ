@@ -241,16 +241,16 @@ export const business = {
     "Atención veterinaria, diagnóstico, cirugía, farmacia, grooming y apoyo para viajes en Venustiano Carranza, CDMX.",
   owners: [
     {
-      name: "MVZ. Paulina E. Ortiz Rivera",
-      initials: "PO",
-      role: "Médica Veterinaria Zootecnista",
-      photo: media.paulina
-    },
-    {
       name: "MVZ. Jimena Núñez Pacheco",
       initials: "JN",
       role: "Médica Veterinaria Zootecnista",
       photo: media.jimena
+    },
+    {
+      name: "MVZ. Paulina E. Ortiz Rivera",
+      initials: "PO",
+      role: "Médica Veterinaria Zootecnista",
+      photo: media.paulina
     }
   ],
   experience: "3 años trabajando junto a ti",
