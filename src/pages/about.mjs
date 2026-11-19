@@ -76,59 +76,6 @@ export function render(ctx) {
     </div>
   </section>
 
-  <section class="section" aria-labelledby="forma-trabajo-title">
-    <div class="container story-layout">
-      <div class="story-layout__content reveal">
-        ${sectionHeading({
-          eyebrow: "Nuestra forma de trabajar",
-          title: "Cuidado profesional desde la consulta hasta el seguimiento",
-          text: "Buscamos que cada familia comprenda el motivo de la valoración, los estudios sugeridos y las siguientes acciones del plan de atención.",
-          id: "forma-trabajo-title"
-        })}
-        <div class="check-list check-list--single">
-          <span>${icon("check", "mini-icon")} Escucha del motivo de consulta</span>
-          <span>${icon("check", "mini-icon")} Exploración y valoración veterinaria</span>
-          <span>${icon("check", "mini-icon")} Explicación de estudios o procedimientos</span>
-          <span>${icon("check", "mini-icon")} Indicaciones y seguimiento</span>
-        </div>
-      </div>
-      <div class="story-layout__visual reveal reveal--delay">
-        ${mediaFigure(ctx, business.media.paulinaProcedure, "Atención de un paciente felino durante un procedimiento veterinario")}
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--soft" aria-labelledby="diferenciadores-title">
-    <div class="container">
-      ${sectionHeading({
-        eyebrow: "Lo que nos guía",
-        title: "Principios de atención",
-        text: "El sitio conserva los valores definidos para Centro Veterinario Zaragoza: cercanía, actualización y servicios integrales.",
-        align: "center",
-        id: "diferenciadores-title"
-      })}
-      <div class="feature-grid">
-        ${business.differentiators.map((feature, index) => featureCard(feature, index)).join("")}
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="instalaciones-title">
-    <div class="container choice-panel">
-      <div>
-        <p class="eyebrow">Un solo centro</p>
-        <h2 id="instalaciones-title">Servicios clínicos y de cuidado en la misma ubicación</h2>
-        <p>Consulta, especialidades, imagen, laboratorio, cirugía, farmacia, microchip, documentación para viajes y grooming.</p>
-      </div>
-      <div class="choice-panel__list">
-        <span>${icon("stethoscope")} Clínica veterinaria</span>
-        <span>${icon("ultrasound")} Diagnóstico</span>
-        <span>${icon("pharmacy")} Farmacia</span>
-        <span>${icon("scissors")} Grooming</span>
-      </div>
-    </div>
-  </section>
-
   <section class="final-cta">
     <div class="container final-cta__inner">
       <div><p class="eyebrow eyebrow--light">Conoce nuestra atención</p><h2>Visítanos en C. 33 161</h2><p>Estamos en la colonia Ignacio Zaragoza, alcaldía Venustiano Carranza, Ciudad de México.</p></div>
